@@ -119,7 +119,7 @@ opencv-python-headless==4.13.0.92
     # via easyocr
 openpyxl==3.1.5
     # via -r requirements.txt
-orjson==3.10.18
+orjson==3.11.6
     # via
     #   langsmith
     #   mistralai
@@ -136,7 +136,7 @@ pandas==2.2.3
     # via
     #   -r requirements.txt
     #   streamlit
-pillow==11.3.0
+pillow==12.1.1
     # via
     #   -r requirements.txt
     #   easyocr
@@ -234,7 +234,7 @@ torch==2.10.0
     #   torchvision
 torchvision==0.25.0
     # via easyocr
-tornado==6.5.4
+tornado==6.5.5
     # via streamlit
 tqdm==4.67.3
     # via -r requirements.txt
