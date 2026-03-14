@@ -1,0 +1,18 @@
+{
+  "run_id": "20260310_174303",
+  "dataset": "evals\\datasets\\p10_eval_set_v1.jsonl",
+  "k": 5,
+  "model_name": "mistral-small-latest",
+  "metrics_loaded": [
+    "faithfulness",
+    "answer_relevancy"
+  ],
+  "metrics_skipped": [],
+  "notes": [
+    "Faithfulness est instanciée avec llm=...",
+    "AnswerRelevancy est instanciée avec llm=... et embeddings=...",
+    "evaluate() est appelé sans llm= ni embeddings= pour éviter les injections implicites au niveau global.",
+    "strictness=1 a été choisi pour stabiliser la métrique answer_relevancy ; tu pourras tester 3 ensuite.",
+    "Pour réduire les 429: max_workers=1 et retries élevés."
+  ]
+}

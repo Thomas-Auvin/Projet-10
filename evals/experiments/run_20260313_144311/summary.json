@@ -1,0 +1,18 @@
+{
+  "run_id": "20260313_144311",
+  "dataset": "evals\\datasets\\p10_eval_set_v1.jsonl",
+  "k": 5,
+  "model_name": "mistral-small-latest",
+  "metrics_loaded": [
+    "faithfulness",
+    "answer_relevancy"
+  ],
+  "metrics_skipped": [],
+  "notes": [
+    "Cette version évalue l'agent hybride via run_agent_with_trace(...), pas l'ancien pipeline direct.",
+    "Les retrieved_contexts fournis à RAGAS incluent maintenant les chunks RAG et un résumé de preuve SQL quand le tool SQL est utilisé.",
+    "Les métriques de tool calling sont calculées à partir de expected_tool vs used_tools.",
+    "Faithfulness et answer_relevancy restent évaluées via RAGAS avec le même montage de métriques qu'avant.",
+    "Pour réduire les 429: max_workers=1 et retries élevés."
+  ]
+}

@@ -1,0 +1,328 @@
+question,faithfulness_old,answer_relevancy_old,hit_at_k_old,mrr_old,recall_at_k_old,precision_at_k_old,tool_routing_ok_old,tool_call_accuracy_ragas_old,tool_call_precision_ragas_old,tool_call_recall_ragas_old,tool_call_f1_ragas_old,sql_row_count_old,expected_tool_old,answer_old,reference_old,sql_query_old,faithfulness_new,answer_relevancy_new,hit_at_k_new,mrr_new,recall_at_k_new,precision_at_k_new,tool_routing_ok_new,tool_call_accuracy_ragas_new,tool_call_precision_ragas_new,tool_call_recall_ragas_new,tool_call_f1_ragas_new,sql_row_count_new,expected_tool_new,answer_new,reference_new,sql_query_new,_merge,delta_faithfulness,delta_answer_relevancy,delta_hit_at_k,delta_mrr,delta_recall_at_k,delta_precision_at_k,delta_tool_routing_ok,delta_tool_call_accuracy_ragas,delta_tool_call_precision_ragas,delta_tool_call_recall_ragas,delta_tool_call_f1_ragas,delta_sql_row_count,degradation_score
+Compare les statistiques de rebonds de l'équipe à domicile et à l'extérieur.,1.0,0.0,,,,,,,,,,0.0,none,Aucune donnée disponible sur les statistiques de rebonds à domicile et à l'extérieur.,Non répondable avec les sources actuelles (pas de découpage domicile/extérieur).,"SELECT
+    team_code,
+    AVG(CASE WHEN team_code = 'HOME' THEN reb ELSE NULL END) AS avg_home_rebounds,
+    AVG(CASE WHEN team_code = 'AWAY' THEN reb ELSE NULL END) AS avg_away_rebounds
+FROM players_stats
+GROUP BY team_code
+HAVING team_code IN ('HOME', 'AWAY')",1.0,0.0,,,,,,,,,,0.0,none,"La question est hors périmètre de la base SQLite actuelle. La base contient des statistiques joueurs/équipes et un dictionnaire de métriques, mais pas l’historique match par match, pas domicile/extérieur, pas vidéos, pas transferts ni actualité hebdomadaire.",Non répondable avec les sources actuelles (pas de découpage domicile/extérieur).,OUT_OF_SCOPE,both,0.0,0.0,,,,,,,,,,0.0,0.0
+"D'après le fichier Excel (Données NBA), qui a marqué le plus de points (PTS) sur la saison, et combien ?",1.0,0.8735800801893724,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander a marqué le plus de points sur la saison avec 2485 points.,Shai Gilgeous-Alexander — 2485 points.,"SELECT player, pts FROM players_stats ORDER BY pts DESC LIMIT 1",1.0,0.8735800801893724,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander a marqué le plus de points sur la saison avec 2485 points.,Shai Gilgeous-Alexander — 2485 points.,"SELECT player, pts FROM players_stats ORDER BY pts DESC LIMIT 1",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+"Dans Reddit 1, quels sont les deux jeunes joueurs du Magic cités, et quel est le reproche principal fait à l'équipe ?",0.6666666666666666,0.9318754589379245,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les deux jeunes joueurs du Magic cités sont Franz Wagner et Jalen Suggs. Le reproche principal fait à l'équipe est qu'ils manquent de tireurs à trois points, ce qui les handicape pour gagner des matchs.",Paolo et Franz ; reproche principal : ils sont « awful shooting » (très mauvais au tir).,,0.6666666666666666,0.9320378989405212,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les deux jeunes joueurs du Magic cités sont Franz Wagner et Jalen Suggs. Le reproche principal fait à l'équipe est qu'ils manquent de tireurs à trois points, ce qui les handicape pour gagner des matchs.",Paolo et Franz ; reproche principal : ils sont « awful shooting » (très mauvais au tir).,,both,0.0,0.00016244000259679758,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.00016244000259679758
+"Dans Reddit 2, quel est le débat principal autour de l'utilisation des statistiques en NBA ?",0.375,0.871202642159415,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Le débat principal autour de l'utilisation des statistiques en NBA sur Reddit 2 porte sur l'équilibre entre l'importance des statistiques et l'aspect divertissement. Certains utilisateurs estiment que la NBA se concentre trop sur les superstars et les highlights, au détriment du jeu de basketball lui-même. Ils critiquent également la manière dont les statistiques sont utilisées pour promouvoir certaines équipes ou joueurs, parfois au détriment de la qualité du jeu. D'autres utilisateurs défendent l'utilisation des statistiques pour évaluer les performances des équipes et des joueurs, arguant que cela ajoute une dimension stratégique et analytique au sport. Le débat reflète une tension entre les puristes du basketball et ceux qui apprécient l'aspect spectacle et analytique du jeu.","Débat sur l'omniprésence des statistiques et la « starification » : certains estiment que ça détourne la NBA de ce que le basket « devrait être », d'autres défendent l'intérêt des métriques pour analyser la performance.",,0.8,0.9687589668804152,1.0,0.5,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Le débat principal autour de l'utilisation des statistiques en NBA sur Reddit 2 porte sur l'équilibre entre l'analyse statistique et l'aspect divertissement de la ligue. Certains utilisateurs soulignent que les statistiques sont cruciales pour évaluer les performances des équipes et des joueurs, tandis que d'autres critiquent la manière dont la NBA met en avant les superstars au détriment du jeu d'équipe. Il y a aussi des discussions sur l'impact des statistiques sur les décisions stratégiques et la manière dont elles influencent la perception des équipes et des joueurs par les fans et les médias.","Débat sur l'omniprésence des statistiques et la « starification » : certains estiment que ça détourne la NBA de ce que le basket « devrait être », d'autres défendent l'intérêt des métriques pour analyser la performance.",,both,0.42500000000000004,0.09755632472100018,0.0,-0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.02255632472100022
+"Dans Reddit 3, quel est le débat principal à propos de Reggie Miller ?",1.0,0.9334907879516394,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Le débat principal à propos de Reggie Miller dans Reddit 3 porte sur son classement parmi les meilleurs joueurs de tous les temps. Certains utilisateurs argumentent qu'il est sous-évalué et soulignent sa performance exceptionnelle en playoffs, le comparant à des joueurs comme Jamal Murray. D'autres estiment qu'il n'était pas assez dominant pour être classé parmi les meilleurs, mentionnant qu'il n'a été sélectionné que trois fois dans l'équipe All-NBA. Un autre point de débat est sa place dans le Hall of Fame, certains pensant qu'il mérite d'y être, tandis que d'autres remettent en question la valeur du Hall of Fame lui-même.",Débat sur son efficacité offensive et sa place/classement dans l'histoire de la NBA.,,1.0,0.8709373552915156,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Le débat principal à propos de Reggie Miller dans Reddit 3 porte sur sa valeur et son classement parmi les meilleurs joueurs de l'histoire de la NBA. Certains utilisateurs argumentent qu'il est sous-estimé et soulignent ses performances exceptionnelles en playoffs, le comparant à des joueurs comme Jamal Murray. D'autres estiment qu'il n'était pas assez dominant pour être considéré parmi les tout meilleurs, notant qu'il n'a été sélectionné que trois fois dans l'équipe All-NBA. Un autre point de débat concerne son efficacité en tant que premier choix offensif en playoffs et son impact sur les Pacers d'Indiana, avec des discussions sur sa comparaison avec d'autres grands joueurs comme Jerry West et Dwyane Wade.",Débat sur son efficacité offensive et sa place/classement dans l'histoire de la NBA.,,both,0.0,-0.06255343266012381,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.06255343266012381
+"Dans Reddit 4, quelle situation rare concernant l'avantage du terrain en Finales NBA est discutée ?",1.0,0.8903952376297933,1.0,1.0,1.0,0.5,1.0,1.0,1.0,1.0,1.0,,rag,"La situation rare discutée est qu'aucune équipe n'a jamais atteint les Finales NBA sans avantage du terrain. Pour qu'une équipe atteigne les Finales sans cet avantage, elle devrait être classée 6ème ou moins, mais cela ne s'est jamais produit car chaque Finale a toujours inclus au moins une équipe classée 1ère, 2ème ou 3ème.",Un cas où une équipe a eu l'avantage du terrain en Finales NBA sans l'avoir eu lors des tours précédents de playoffs.,,1.0,0.8457348041209144,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"La situation rare discutée dans Reddit 4 concerne le fait qu'aucune équipe n'a jamais remporté un titre NBA en gagnant 4 matchs décisifs (Game 7). Cette question a été posée et discutée par les utilisateurs, avec des réponses indiquant que cela ne s'est jamais produit dans l'histoire de la NBA. Les utilisateurs ont également discuté de la rareté de cette situation et des conditions nécessaires pour qu'elle se produise.",Un cas où une équipe a eu l'avantage du terrain en Finales NBA sans l'avoir eu lors des tours précédents de playoffs.,,both,0.0,-0.04466043350887894,0.0,0.0,0.0,-0.3,0.0,0.0,0.0,0.0,0.0,,0.3446604335088789
+Donne-moi le lien vers la vidéo du meilleur dunk NBA de la semaine.,1.0,0.9232822824774698,,,,,,,,,,,none,Aucun lien vers la vidéo du meilleur dunk NBA de la semaine n'a été trouvé dans les documents Reddit analysés.,Non disponible dans les sources fournies (sources textuelles/Excel uniquement).,,0.5,0.0,,,,,,,,,,,none,Je n'ai pas trouvé de lien vidéo pour le meilleur dunk de la semaine dans les documents Reddit. Il est possible que cette information ne soit pas disponible dans les sources actuelles.,Non disponible dans les sources fournies (sources textuelles/Excel uniquement).,,both,-0.5,-0.9232822824774698,,,,,,,,,,,1.4232822824774698
+Donne-moi le meilleur scoreur et le joueur le plus jeune dans la même réponse.,0.5,0.925504833454734,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,"Le meilleur scoreur est Shai Gilgeous-Alexander avec 2485 points, et le joueur le plus jeune est Bub Carrington à 19 ans.",Meilleur scoreur : Shai Gilgeous-Alexander (2485). Plus jeune : Bub Carrington (19).,"SELECT player, SUM(pts) AS total_points
+FROM players_stats
+GROUP BY player
+ORDER BY total_points DESC
+LIMIT 1",0.6666666666666666,0.8828138281317467,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,"Le meilleur scoreur de la saison NBA 2023-24 est Shai Gilgeous-Alexander avec 2485 points, et le joueur le plus jeune est Bub Carrington.",Meilleur scoreur : Shai Gilgeous-Alexander (2485). Plus jeune : Bub Carrington (19).,"SELECT p.player, p.pts
+FROM players_stats p
+ORDER BY p.pts DESC
+LIMIT 1",both,0.16666666666666663,-0.04269100532298731,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.12397566134367932
+Définis 3P% et 3PA (d'après le dictionnaire) puis donne le meilleur 3P% parmi les joueurs avec 3PA > 100.,1.0,0.8817295177990002,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,3P% (Three-Point Percentage) est le pourcentage de réussite aux tirs à 3 points. 3PA (Three-Point Attempts) est le nombre de tirs à 3 points tentés par match. Le meilleur 3P% parmi les joueurs avec 3PA > 100 est Seth Curry (CHA) avec 45.6%.,3P% = % de réussite à 3 points. 3PA = tirs à 3 points tentés par match. Meilleur 3P% (3PA>100) : Seth Curry 45.6% (3PA=184).,"SELECT player, team_code, three_p_pct, three_pa
+FROM players_stats
+WHERE three_pa > 100
+ORDER BY three_p_pct DESC
+LIMIT 1",0.6666666666666666,0.8460843752467773,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,3P% (3-Point Percentage) est le pourcentage de réussite aux tirs à 3 points. 3PA (3-Point Attempts) est le nombre de tirs à 3 points tentés par match. Le meilleur 3P% parmi les joueurs avec plus de 100 3PA est Seth Curry avec 45.6%.,3P% = % de réussite à 3 points. 3PA = tirs à 3 points tentés par match. Meilleur 3P% (3PA>100) : Seth Curry 45.6% (3PA=184).,"SELECT p.player, p.three_p_pct
+FROM players_stats p
+WHERE p.three_pa > 100
+ORDER BY p.three_p_pct DESC
+LIMIT 1",both,-0.33333333333333337,-0.03564514255222295,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.3689784758855563
+Définis AST/TO (d'après le dictionnaire) puis donne le joueur au meilleur AST/TO.,1.0,0.8255125770726214,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,AST/TO signifie le ratio entre les passes décisives (AST) et les pertes de balle (TO). Le joueur avec le meilleur AST/TO est Mason Jones avec un ratio de 11.0.,AST/TO = ratio passes / pertes de balle. Meilleur AST/TO : Mason Jones 11.0.,"SELECT player, ast_to_ratio
+FROM players_stats
+ORDER BY ast_to_ratio DESC
+LIMIT 1",1.0,0.8287798643226475,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,AST/TO signifie le ratio entre les passes décisives (AST) et les pertes de balle (TO). Le joueur avec le meilleur AST/TO est Mason Jones avec un ratio de 11.0.,AST/TO = ratio passes / pertes de balle. Meilleur AST/TO : Mason Jones 11.0.,"SELECT p.player, p.ast_to_ratio
+FROM players_stats p
+ORDER BY p.ast_to_ratio DESC
+LIMIT 1",both,0.0,0.0032672872500261185,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.0032672872500261185
+Définis PACE (d'après le dictionnaire) puis donne le joueur au PACE le plus élevé parmi ceux ayant GP×Min ≥ 1000.,1.0,0.8488696905440314,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,PACE signifie rythme de jeu (possessions par 48 minutes). Le joueur avec le PACE le plus élevé parmi ceux ayant GP×Min ≥ 1000 est Jalen Johnson avec un PACE de 106.68.,PACE = rythme de jeu (possessions par 48 minutes). Plus haut PACE (≥1000 min) : Jalen Johnson 106.68.,"SELECT player, pace
+FROM players_stats
+WHERE gp * minutes >= 1000
+ORDER BY pace DESC
+LIMIT 1",1.0,0.8490986847188308,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,PACE signifie rythme de jeu (possessions par 48 minutes). Le joueur avec le PACE le plus élevé parmi ceux ayant GP×Min ≥ 1000 est Jalen Johnson avec un PACE de 106.68.,PACE = rythme de jeu (possessions par 48 minutes). Plus haut PACE (≥1000 min) : Jalen Johnson 106.68.,"SELECT p.player, p.pace
+FROM players_stats p
+WHERE p.gp * p.minutes >= 1000
+ORDER BY p.pace DESC
+LIMIT 1",both,0.0,0.00022899417479937956,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.00022899417479937956
+Définis PIE (d'après le dictionnaire) puis donne le joueur au PIE le plus élevé parmi ceux ayant GP×Min ≥ 1000.,1.0,0.9005165427485841,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,Le PIE (Player Impact Estimate) est une métrique qui évalue l'impact global d'un joueur sur le terrain. Le joueur avec le PIE le plus élevé parmi ceux ayant GP×Min ≥ 1000 est Giannis Antetokounmpo avec un PIE de 21.0.,PIE = Player Impact Estimate – évaluation globale de l’impact. Plus haut PIE (≥1000 min) : Giannis Antetokounmpo 21.0.,"SELECT player, pie
+FROM players_stats
+WHERE gp * minutes >= 1000
+ORDER BY pie DESC
+LIMIT 1",1.0,0.9364268094174204,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,"PIE signifie Player Impact Estimate, c'est-à-dire une évaluation globale de l'impact d'un joueur. Le joueur avec le PIE le plus élevé parmi ceux ayant GP×Min ≥ 1000 est Giannis Antetokounmpo avec un PIE de 21.0.",PIE = Player Impact Estimate – évaluation globale de l’impact. Plus haut PIE (≥1000 min) : Giannis Antetokounmpo 21.0.,"SELECT p.player, p.pie
+FROM players_stats p
+WHERE p.gp * p.minutes >= 1000
+ORDER BY p.pie DESC
+LIMIT 1",both,0.0,0.035910266668836344,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.035910266668836344
+Définis TS% (d'après le dictionnaire) puis donne le meilleur TS% parmi les joueurs ayant GP×Min ≥ 1000.,1.0,0.919579819269016,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,"Le True Shooting Percentage (TS%) est un indicateur d'efficacité au tir qui inclut les tirs réussis (FG) et les lancers francs (FT). Le meilleur TS% parmi les joueurs ayant GP×Min ≥ 1000 est celui de Jarrett Allen, avec un TS% de 72.4.",TS% = True Shooting % (inclut FG et FT dans l'efficacité). Meilleur TS% (≥1000 min) : Jarrett Allen 72.4.,"SELECT player, ts_pct
+FROM players_stats
+WHERE gp * minutes >= 1000
+ORDER BY ts_pct DESC
+LIMIT 1",1.0,0.8761952552880029,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,Le True Shooting Percentage (TS%) est un indicateur d'efficacité au tir qui inclut les tirs de champ et les lancers francs. Le meilleur TS% parmi les joueurs ayant GP×Min ≥ 1000 est de 72.4%.,TS% = True Shooting % (inclut FG et FT dans l'efficacité). Meilleur TS% (≥1000 min) : Jarrett Allen 72.4.,SELECT MAX(p.ts_pct) FROM players_stats p WHERE p.gp * p.minutes >= 1000,both,0.0,-0.04338456398101309,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.04338456398101309
+Définis USG% (d'après le dictionnaire) puis donne le joueur au plus haut USG%.,1.0,0.8704367147627134,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,"USG% signifie Usage Rate, c'est-à-dire le pourcentage d'actions utilisées par le joueur. Le joueur avec le plus haut USG% est James Wiseman avec 45.5%.",USG% = Usage Rate – % des actions utilisées par le joueur. Plus haut USG% : James Wiseman 45.5.,"SELECT player, usg_pct FROM players_stats ORDER BY usg_pct DESC LIMIT 1",1.0,0.8702023855276366,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,"USG% signifie Usage Rate, c'est-à-dire le pourcentage d'actions utilisées par le joueur. Le joueur avec le plus haut USG% est James Wiseman avec 45.5%.",USG% = Usage Rate – % des actions utilisées par le joueur. Plus haut USG% : James Wiseman 45.5.,"SELECT p.player, p.usg_pct
+FROM players_stats p
+ORDER BY p.usg_pct DESC
+LIMIT 1",both,0.0,-0.00023432923507682446,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.00023432923507682446
+Explique NETRTG (d'après le dictionnaire) et vérifie le calcul pour Shai Gilgeous-Alexander à partir de OFFRTG et DEFRTG.,0.75,0.8793235331741721,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,"Le NETRTG (Net Rating) est une statistique NBA qui mesure l'écart de points marqués et encaissés par 100 possessions lorsque le joueur est sur le terrain. Il se calcule comme la différence entre l'OFFRTG (Offensive Rating) et le DEFRTG (Defensive Rating).
+
+Pour Shai Gilgeous-Alexander, le NETRTG est de 16.7.",NETRTG = OFFRTG - DEFRTG. Pour Shai : 122.4 - 105.7 = 16.7 (cohérent).,SELECT (offrtg - defrtg) AS netrtg FROM players_stats WHERE player = 'Shai Gilgeous-Alexander',1.0,0.9056250321591596,1.0,1.0,0.5,0.2,1.0,1.0,1.0,1.0,1.0,1.0,hybrid,"NETRTG (Net Rating) est une statistique NBA qui mesure la différence entre l'OFFRTG (Offensive Rating) et le DEFRTG (Defensive Rating) d'une équipe ou d'un joueur. L'OFFRTG représente les points marqués par 100 possessions, tandis que le DEFRTG représente les points encaissés par 100 possessions. Le NETRTG est donc calculé comme la différence entre ces deux valeurs (NETRTG = OFFRTG - DEFRTG).
+
+Pour Shai Gilgeous-Alexander, le NETRTG est de 16.7. Cela signifie que lorsque Shai Gilgeous-Alexander est sur le terrain, son équipe marque en moyenne 16.7 points de plus qu'elle n'en encaisse par 100 possessions.",NETRTG = OFFRTG - DEFRTG. Pour Shai : 122.4 - 105.7 = 16.7 (cohérent).,SELECT p.netrtg FROM players_stats p WHERE p.player = 'Shai Gilgeous-Alexander',both,0.25,0.02630149898498746,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.27630149898498746
+"In Reddit 2, what is the main debate about using statistics in the NBA?",1.0,0.973547066328596,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"The main debate about using statistics in the NBA on Reddit 2 revolves around the perception of the league's focus on superstars and highlights over the actual game of basketball. Some users argue that the NBA prioritizes promoting superstars and creating engaging content for algorithms, which can overshadow the sport itself. Others discuss the impact of advanced statistics on the game, noting that even the best teams statistically may not generate much excitement or interest among casual viewers. There is also a critique of the NBA's marketing and PR strategies, with some suggesting that the league needs to improve how it presents statistical matchups to attract more fans.",Debate about the overuse of statistics and star-driven narratives versus what basketball 'should' be; contrasting views on the value of metrics for performance analysis.,,1.0,0.973547066328596,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"The main debate about using statistics in the NBA on Reddit 2 revolves around the perception of the league's focus on superstars and highlights over the actual game of basketball. Some users argue that the NBA prioritizes promoting superstars and creating engaging content for casual viewers, which can overshadow the importance of the game itself. This debate includes discussions on how the media and fans' obsessions with popularity contests and superstar narratives can influence the way basketball is perceived and marketed.",Debate about the overuse of statistics and star-driven narratives versus what basketball 'should' be; contrasting views on the value of metrics for performance analysis.,,both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0
+"In Reddit 3, what is the main debate about Reggie Miller?",1.0,0.9658676146101328,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"The main debate about Reggie Miller on Reddit 3 revolves around his overall ranking and impact in NBA history. Some users argue that he is underrated, particularly for his playoff performance, where he significantly increased his output and was considered an absolute monster. Others contend that while he was a great player, he may not be among the top 10 or even the top 20 players of all time, as he never was in MVP discussions and only made All-NBA three times. There is also debate about his efficiency as a first option in playoff history and his role as the best player on a perennial playoff team for over a decade. Additionally, some users discuss his Hall of Fame worthiness and his influence on the game, with some peers respecting him highly enough to include him in discussions of the best players.",Discussion about his offensive efficiency and where he ranks in NBA history.,,0.7857142857142857,0.9658676146101328,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"The main debate about Reggie Miller on Reddit 3 revolves around his overall impact, efficiency, and ranking among the greatest NBA players. Some users argue that he was underrated, particularly in the playoffs, where he significantly increased his performance. Others contend that while he was a great player, he may not be in the top tier of all-time greats, citing his limited regular-season accolades and the fact that he never won a championship. There is also discussion about his efficiency as a primary scorer and his role in the Pacers' offense, with some comparing him to other shooting guards and discussing his Hall of Fame credentials.",Discussion about his offensive efficiency and where he ranks in NBA history.,,both,-0.2142857142857143,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.2142857142857143
+"In Reddit 4, what rare NBA Finals home-court advantage situation is being discussed?",1.0,0.9633447742066316,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"The rare NBA Finals home-court advantage situation discussed in Reddit 4 is the scenario where a team does not have home-court advantage until the NBA Finals. This situation is extremely rare and has never happened in the modern NBA. It would require two low-seeded teams to emerge from both the Western and Eastern Conferences, which has never occurred before because the best teams usually secure the highest seeds.",A team having home-court advantage in the NBA Finals despite not having had it in earlier playoff rounds.,,1.0,0.9672959826484936,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"The rare NBA Finals home-court advantage situation being discussed in Reddit 4 is the scenario where a team does not have home-court advantage until the NBA Finals. This would require two lower-seeded teams to emerge from both the Western and Eastern Conferences, which has never happened before because the best teams usually secure the highest seeds. The discussion highlights that while multiple teams have reached the Finals without home-court advantage, none have had this specific situation where they only gain home-court advantage in the Finals.",A team having home-court advantage in the NBA Finals despite not having had it in earlier playoff rounds.,,both,0.0,0.003951208441862031,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.003951208441862031
+"Parmi les 10 meilleurs marqueurs (top 10 PTS), quel joueur a le meilleur Defensive Rating (DEFRTG le plus faible) ?",1.0,0.942219684432702,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,Shai Gilgeous-Alexander a le meilleur Defensive Rating (105.7) parmi les 10 meilleurs marqueurs.,Shai Gilgeous-Alexander — DEFRTG 105.7 (le plus faible du top 10 PTS).,"SELECT player, pts, defrtg
+FROM players_stats
+ORDER BY pts DESC, defrtg ASC
+LIMIT 10",1.0,0.9534000292188844,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander est le joueur parmi les 10 meilleurs marqueurs avec le meilleur Defensive Rating (DEFRTG le plus faible) de 105.7.,Shai Gilgeous-Alexander — DEFRTG 105.7 (le plus faible du top 10 PTS).,"SELECT p.player, p.pts, p.defrtg
+FROM players_stats p
+WHERE p.pts IN (
+    SELECT p.pts
+    FROM players_stats p
+    ORDER BY p.pts DESC
+    LIMIT 10
+)
+ORDER BY p.defrtg ASC
+LIMIT 1;",both,0.0,0.011180344786182461,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-9.0,-0.011180344786182461
+"Parmi les 10 meilleurs marqueurs (top 10 PTS), quel joueur a le meilleur Offensive Rating (OFFRTG) ?",1.0,0.9418630203634794,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Nikola Jokić a le meilleur Offensive Rating (OFFRTG) parmi les 10 meilleurs marqueurs (top 10 PTS) avec un OFFRTG de 125,6.",Nikola Jokić — OFFRTG 125.6.,"SELECT player, pts, offrtg
+FROM players_stats
+ORDER BY pts DESC, offrtg DESC
+LIMIT 10",1.0,0.9142015007037744,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Nikola Jokić a le meilleur Offensive Rating (125.6) parmi les 10 meilleurs marqueurs avec 2072 points marqués cette saison.,Nikola Jokić — OFFRTG 125.6.,"SELECT p.player, p.pts, p.offrtg
+FROM players_stats p
+WHERE p.pts IN (
+    SELECT p.pts
+    FROM players_stats p
+    ORDER BY p.pts DESC
+    LIMIT 10
+)
+ORDER BY p.offrtg DESC
+LIMIT 1",both,0.0,-0.02766151965970498,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-9.0,0.02766151965970498
+Quel Curry a le meilleur pourcentage à 3 points ?,1.0,0.8485265184701237,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Seth Curry a le meilleur pourcentage à 3 points avec 45.6% de réussite sur 184 tirs tentés.,"Réponse attendue : demander précision (Seth vs Stephen). Dans ces données, Seth Curry est présent et a 45.6% (3PA=184).","SELECT player, three_p_pct, three_pa
+FROM players_stats
+WHERE player LIKE '%Curry%'
+ORDER BY three_p_pct DESC
+LIMIT 1",1.0,0.870911507496244,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Seth Curry a le meilleur pourcentage à 3 points avec 45.6%.,"Réponse attendue : demander précision (Seth vs Stephen). Dans ces données, Seth Curry est présent et a 45.6% (3PA=184).","SELECT p.player, p.three_p_pct
+FROM players_stats p
+WHERE p.player LIKE '%Curry%'
+ORDER BY p.three_p_pct DESC
+LIMIT 1",both,0.0,0.022384989026120294,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.022384989026120294
+Quel a été le score du dernier match des Lakers ?,1.0,0.952989191103914,,,,,,,,,,1.0,none,Le score du dernier match des Lakers est de 78.,Non disponible dans les sources fournies.,SELECT wins + losses AS score FROM players_stats WHERE team_code = 'LAL' ORDER BY wins + losses DESC LIMIT 1,1.0,0.0,,,,,,,,,,0.0,none,"Le score du dernier match des Lakers n'est pas disponible dans les sources actuelles. Les données disponibles concernent les statistiques des joueurs et des équipes, mais pas les résultats des matchs récents.",Non disponible dans les sources fournies.,OUT_OF_SCOPE,both,0.0,-0.952989191103914,,,,,,,,,,-1.0,0.952989191103914
+Quel est l'écart de points (PTS) entre le meilleur marqueur (#1) et le 10e meilleur marqueur (#10) ?,1.0,0.9398629513722088,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,L'écart de points entre le meilleur marqueur et le 10e meilleur marqueur est de 684 points.,Écart = 2485 - 1801 = 684 points.,"SELECT (MAX(pts) - (SELECT pts FROM players_stats ORDER BY pts DESC LIMIT 1 OFFSET 9)) AS pts_difference
+FROM players_stats",1.0,0.9398629513722088,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,L'écart de points entre le meilleur marqueur et le 10e meilleur marqueur est de 684 points.,Écart = 2485 - 1801 = 684 points.,"SELECT (MAX(p.pts) - MIN(p.pts)) AS pts_gap
+FROM players_stats p
+WHERE p.player IN (
+    SELECT p.player
+    FROM players_stats p
+    ORDER BY p.pts DESC
+    LIMIT 10
+)",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Quel est le joueur le plus jeune (Age) et quel âge a-t-il ?,1.0,0.9577158071827406,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,"Le joueur le plus jeune est Bub Carrington, âgé de 19 ans.",Bub Carrington — 19 ans.,"SELECT player, age FROM players_stats ORDER BY age ASC LIMIT 1",1.0,0.9577158071827406,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,"Le joueur le plus jeune est Bub Carrington, âgé de 19 ans.",Bub Carrington — 19 ans.,"SELECT player, age FROM players_stats ORDER BY age ASC LIMIT 1",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Quel est le joueur le plus âgé (Age) et quel âge a-t-il ?,1.0,0.939377137560881,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,"Le joueur le plus âgé est P.J. Tucker, âgé de 40 ans.",LeBron James — 40 ans.,"SELECT player, age FROM players_stats ORDER BY age DESC LIMIT 1",1.0,0.939377137560881,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,"Le joueur le plus âgé est P.J. Tucker, âgé de 40 ans.",LeBron James — 40 ans.,"SELECT player, age FROM players_stats ORDER BY age DESC LIMIT 1",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Quel est le meilleur marqueur des Oklaoma City Thuder ? (attention aux fautes),1.0,0.9045729770711972,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Le meilleur marqueur des Oklahoma City Thunder est Shai Gilgeous-Alexander avec 2485 points.,Interpréter la question comme OKC (Oklahoma City Thunder) et répondre : Shai Gilgeous-Alexander (2485).,"SELECT player, pts
+FROM players_stats
+JOIN teams ON players_stats.team_code = teams.team_code
+WHERE teams.team_name = 'Oklahoma City Thunder'
+ORDER BY pts DESC
+LIMIT 1",1.0,0.8922463229210704,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Le meilleur marqueur des Oklahoma City Thunder est Shai Gilgeous-Alexander avec un ratio de 0.956 points par minute jouée.,Interpréter la question comme OKC (Oklahoma City Thunder) et répondre : Shai Gilgeous-Alexander (2485).,"SELECT p.player, p.pts / (p.gp * p.minutes) AS pts_per_minute
+FROM players_stats p
+JOIN teams t ON p.team_code = t.team_code
+WHERE t.team_name = 'Oklahoma City Thunder'
+ORDER BY pts_per_minute DESC
+LIMIT 1",both,0.0,-0.012326654150126792,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.012326654150126792
+"Quel est le nom complet de l'équipe OKC, et quel joueur de cette équipe est le meilleur marqueur (PTS) dans les données ?",1.0,0.953410692106236,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.5,0.6666666666666666,1.0,hybrid,Le nom complet de l'équipe OKC est Oklahoma City Thunder. Le meilleur marqueur de cette équipe dans les données est Shai Gilgeous-Alexander avec 2485 points.,OKC = Oklahoma City Thunder. Meilleur marqueur OKC : Shai Gilgeous-Alexander (2485).,"SELECT t.team_name, p.player, p.pts
+FROM teams t
+JOIN players_stats p ON t.team_code = p.team_code
+WHERE t.team_code = 'OKC'
+ORDER BY p.pts DESC
+LIMIT 1",1.0,0.9616096071464308,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.5,0.6666666666666666,1.0,hybrid,Le nom complet de l'équipe OKC est Oklahoma City Thunder. Le meilleur marqueur de cette équipe dans les données est Shai Gilgeous-Alexander.,OKC = Oklahoma City Thunder. Meilleur marqueur OKC : Shai Gilgeous-Alexander (2485).,"SELECT t.team_name, p.player
+FROM players_stats p
+JOIN teams t ON p.team_code = t.team_code
+WHERE t.team_name = 'Oklahoma City Thunder'
+ORDER BY p.pts DESC
+LIMIT 1",both,0.0,0.008198915040194876,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.008198915040194876
+Quel joueur a le meilleur pourcentage à 3 points sur les 5 derniers matchs ?,0.0,0.96695921578504,,,,,,,,,,1.0,none,"Alondes Williams a le meilleur pourcentage à 3 points sur les 5 derniers matchs, avec 100% de réussite sur 1 tentative.",Non calculable avec les sources actuelles (pas de stats match-par-match / '5 derniers matchs').,"SELECT player, three_p_pct, three_pa
+FROM players_stats
+ORDER BY three_p_pct DESC, three_pa DESC
+LIMIT 1",0.875,0.0,,,,,,,,,,0.0,none,"La base de données actuelle ne contient pas d'historique match par match. Il n'est donc pas possible de répondre à la question sur le meilleur pourcentage à 3 points sur les 5 derniers matchs. La base contient des statistiques joueurs/équipes et un dictionnaire de métriques, mais pas l’historique match par match, pas domicile/extérieur, pas vidéos, pas transferts ni actualité hebdomadaire.",Non calculable avec les sources actuelles (pas de stats match-par-match / '5 derniers matchs').,OUT_OF_SCOPE,both,0.875,-0.96695921578504,,,,,,,,,,-1.0,0.09195921578503996
+Quelle est la moyenne de points (PTS) des 10 meilleurs marqueurs (top 10 PTS) ?,1.0,0.9260836963451244,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,La moyenne de points des 10 meilleurs marqueurs est de 1993.1 points.,Moyenne ≈ 1993.1 points.,SELECT AVG(pts) FROM (SELECT pts FROM players_stats ORDER BY pts DESC LIMIT 10),0.0,0.9184709164021048,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,0.0,sql,La moyenne de points des 10 meilleurs marqueurs est de 29.3 points par match.,Moyenne ≈ 1993.1 points.,"```sql
+SELECT AVG(p.pts) FROM (SELECT p.pts FROM players_stats p ORDER BY p.pts DESC LIMIT 10)",both,-1.0,-0.007612779943019676,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-1.0,1.0076127799430197
+Quels avis sont donnés sur Cade Cunningham (Pistons) dans Reddit 1 ?,0.9090909090909092,0.8805599590028773,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis sur Cade Cunningham (Pistons) dans Reddit 1 sont mitigés. Certains utilisateurs soulignent qu'il est un joueur talentueux et prêt pour les moments importants, mais ils notent également qu'il a besoin de travailler sérieusement sur son tir à trois points, qui n'est pas très efficace. D'autres mentionnent que l'équipe manque d'une option de scoring secondaire en dehors de Cade, surtout avec Jaden Ivey blessé. Ils estiment que Cade est un joueur poised et ready for the moment, mais qu'il a besoin d'améliorer son jeu pour être plus fiable en série éliminatoire.",Il est dit qu'il a prouvé qu'il était le bon choix en numéro 1 de la draft.,,0.6666666666666666,0.9716807714228208,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis sur Cade Cunningham (Pistons) dans Reddit 1 sont variés. Certains utilisateurs soulignent qu'il est un joueur talentueux et prêt pour les moments importants. Cependant, des critiques sont émises sur son tir à trois points, avec des suggestions pour l'améliorer au-delà de 35%. D'autres commentaires indiquent que les Pistons manquent d'options de scoring secondaires, ce qui met une pression supplémentaire sur Cunningham. Globalement, il est perçu comme un joueur clé pour l'équipe, mais avec des domaines à améliorer.",Il est dit qu'il a prouvé qu'il était le bon choix en numéro 1 de la draft.,,both,-0.24242424242424254,0.09112081241994352,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.15130343000429902
+Quels avis sont donnés sur Julius Randle dans Reddit 1 ?,1.0,0.8553983525464834,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis sur Julius Randle dans Reddit 1 sont mitigés. Certains utilisateurs estiment qu'il a une mauvaise réputation en playoffs en raison de circonstances défavorables, comme des blessures et des performances passées. Cependant, d'autres soulignent qu'il a été une révélation cette saison, avec une bonne performance offensive et défensive. Il est décrit comme ayant un style de jeu physique et efficace, et il a surmonté les allégations de 'beyblade' (mouvement de spin excessif). Globalement, les opinions varient, mais il y a une reconnaissance de ses améliorations récentes.","Il est présenté comme une révélation, une des raisons majeures de la baisse de régime de LeBron (« big reason LeBron has run out of gas ») et semble plus engagé en défense.",,1.0,0.975212694239116,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis sur Julius Randle dans Reddit 1 sont variés. Certains utilisateurs estiment que sa réputation en playoffs est injustement influencée par des circonstances passées, comme des blessures ou des performances passées contre les Hawks. Ils soulignent que c'est sa première vraie opportunité de briller et qu'il a bien performé jusqu'à présent. D'autres commentent positivement son jeu, notamment son engagement défensif et son efficacité offensive, le décrivant comme une révélation. Ils apprécient également sa capacité à dominer physiquement ses adversaires et à jouer avec intensité. Cependant, certains rappellent que les opinions sur Randle sont souvent basées sur des performances passées et que son image actuelle est encore influencée par des événements passés.","Il est présenté comme une révélation, une des raisons majeures de la baisse de régime de LeBron (« big reason LeBron has run out of gas ») et semble plus engagé en défense.",,both,0.0,0.11981434169263261,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.11981434169263261
+Quels avis sont donnés sur les Timberwolves (« Wolves ») dans Reddit 1 ?,0.75,0.9482520909944584,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis sur les Timberwolves (« Wolves ») dans Reddit 1 sont mitigés. Certains utilisateurs pensent que l'équipe s'est bien adaptée après le transfert de Karl-Anthony Towns et qu'elle a une bonne chance contre les Cavaliers au tour suivant. D'autres estiment que les Wolves sont l'équipe la plus impressionnante des playoffs, en particulier grâce à la performance d'Anthony Edwards, qui connaît une progression significative. Globalement, les commentaires suggèrent que les Wolves sont considérés comme une équipe forte et prometteuse.",Ils sont décrits comme élite en attaque et en défense.,,0.9,0.9330176655805548,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis sur les Timberwolves (« Wolves ») dans Reddit 1 sont mitigés. Certains utilisateurs pensent que l'échange de Karl-Anthony Towns (surnommé « Kat ») était une dégradation majeure, mais ils se sont adaptés au nouveau roster et trouvent que l'équipe a fière allure. D'autres utilisateurs estiment que les Wolves ont une réelle chance contre les Cavaliers au tour suivant, soulignant que leur offensive est impressionnante. Un utilisateur mentionne que les Wolves sont impressionnants, en particulier Anthony Edwards, qui réalise un bond en avant significatif lors des playoffs. Globalement, les commentaires suggèrent que les Wolves sont perçus comme une équipe forte avec un potentiel notable.",Ils sont décrits comme élite en attaque et en défense.,,both,0.15000000000000002,-0.01523442541390363,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.1347655745860964
+Quels joueurs ont changé d'équipe en cours de saison (transferts) ?,1.0,0.0,,,,,,,,,,,none,"Les données disponibles ne permettent pas de répondre à la question des transferts de joueurs en cours de saison. Les informations disponibles concernent principalement les équipes et les statistiques des joueurs, mais ne mentionnent pas les transferts spécifiques. Les données Reddit ne fournissent pas non plus d'informations pertinentes sur les transferts de joueurs en cours de saison.",Non disponible dans les sources fournies.,,1.0,0.0,,,,,,,,,,,none,"Les données disponibles ne permettent pas de répondre à la question des transferts en cours de saison. Les sources consultées concernent principalement les équipes, les statistiques des joueurs, et des discussions Reddit sans lien direct avec les transferts.",Non disponible dans les sources fournies.,,both,0.0,0.0,,,,,,,,,,,0.0
+"Quels sont les 10 joueurs qui ont marqué le plus de points (PTS), avec leurs totaux ?",1.0,0.9223178983081194,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Les 10 joueurs qui ont marqué le plus de points sont :
+1. Shai Gilgeous-Alexander avec 2485 points
+2. Anthony Edwards avec 2180 points
+3. Nikola Jokić avec 2072 points
+4. Giannis Antetokounmpo avec 2037 points
+5. Jayson Tatum avec 1930 points
+6. Devin Booker avec 1920 points
+7. Tyler Herro avec 1840 points
+8. Trae Young avec 1839 points
+9. Cade Cunningham avec 1827 points
+10. James Harden avec 1801 points",1) Shai Gilgeous-Alexander 2485; 2) Anthony Edwards 2180; 3) Nikola Jokić 2072; 4) Giannis Antetokounmpo 2037; 5) Jayson Tatum 1930; 6) Devin Booker 1920; 7) Tyler Herro 1840; 8) Trae Young 1839; 9) Cade Cunningham 1827; 10) James Harden 1801.,"SELECT player, SUM(pts) AS total_points
+FROM players_stats
+GROUP BY player
+ORDER BY total_points DESC
+LIMIT 10",1.0,0.9223178983081194,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Voici les 10 joueurs qui ont marqué le plus de points : Shai Gilgeous-Alexander (2485), Anthony Edwards (2180), Nikola Jokić (2072), Giannis Antetokounmpo (2037), Jayson Tatum (1930), Devin Booker (1920), Tyler Herro (1840), Trae Young (1839), Cade Cunningham (1827), James Harden (1801).",1) Shai Gilgeous-Alexander 2485; 2) Anthony Edwards 2180; 3) Nikola Jokić 2072; 4) Giannis Antetokounmpo 2037; 5) Jayson Tatum 1930; 6) Devin Booker 1920; 7) Tyler Herro 1840; 8) Trae Young 1839; 9) Cade Cunningham 1827; 10) James Harden 1801.,"SELECT player, pts
+FROM players_stats
+ORDER BY pts DESC
+LIMIT 10",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Quels sont les 10 meilleurs pourcentages à 3 points (3P%) parmi les joueurs ayant tenté plus de 100 tirs à 3 points (3PA > 100) ?,1.0,0.9965138782737344,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Voici les 10 meilleurs pourcentages à 3 points (3P%) parmi les joueurs ayant tenté plus de 100 tirs à 3 points (3PA > 100) :
+
+1. Seth Curry (CHA) : 45.6% (184 tirs)
+2. Zach LaVine (SAC) : 44.6% (533 tirs)
+3. Taurean Prince (MIL) : 43.9% (336 tirs)
+4. Ty Jerome (CLE) : 43.9% (252 tirs)
+5. Vít Krejčí (ATL) : 43.7% (205 tirs)
+6. Doug McDermott (SAC) : 43.6% (101 tirs)
+7. Aaron Gordon (DEN) : 43.6% (173 tirs)
+8. Nicolas Batum (LAC) : 43.3% (203 tirs)
+9. Luke Kennard (MEM) : 43.3% (260 tirs)
+10. Keon Ellis (SAC) : 43.3% (320 tirs)","Seth Curry 45.6% (3PA=184), Zach LaVine 44.6% (533), Taurean Prince 43.9% (336), Ty Jerome 43.9% (252), Vít Krejčí 43.7% (205), Doug McDermott 43.6% (101), Aaron Gordon 43.6% (173), Harrison Barnes 43.3% (361), Nicolas Batum 43.3% (203), Luke Kennard 43.3% (260).","SELECT player, team_code, three_p_pct, three_pa
+FROM players_stats
+WHERE three_pa > 100
+ORDER BY three_p_pct DESC
+LIMIT 10",1.0,0.9659581050357466,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Voici les 10 meilleurs pourcentages à 3 points parmi les joueurs ayant tenté plus de 100 tirs à 3 points :
+1. Seth Curry : 45.6%
+2. Zach LaVine : 44.6%
+3. Taurean Prince : 43.9%
+4. Ty Jerome : 43.9%
+5. Vít Krejčí : 43.7%
+6. Doug McDermott : 43.6%
+7. Aaron Gordon : 43.6%
+8. Nicolas Batum : 43.3%
+9. Luke Kennard : 43.3%
+10. Keon Ellis : 43.3%","Seth Curry 45.6% (3PA=184), Zach LaVine 44.6% (533), Taurean Prince 43.9% (336), Ty Jerome 43.9% (252), Vít Krejčí 43.7% (205), Doug McDermott 43.6% (101), Aaron Gordon 43.6% (173), Harrison Barnes 43.3% (361), Nicolas Batum 43.3% (203), Luke Kennard 43.3% (260).","SELECT p.player, p.three_p_pct
+FROM players_stats p
+WHERE p.three_pa > 100
+ORDER BY p.three_p_pct DESC
+LIMIT 10",both,0.0,-0.03055577323798775,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03055577323798775
+"Quels sont les 10 meilleurs pourcentages à 3 points (3P%) sans contrainte de volume, avec le nombre de tirs tentés (3PA) ?",1.0,0.9972725455643876,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Voici les 10 meilleurs pourcentages à 3 points (3P%) sans contrainte de volume, avec le nombre de tirs tentés (3PA) :
+
+1. Skal Labissiere : 100.0% (1 tir tenté)
+2. Alondes Williams : 100.0% (1 tir tenté)
+3. PJ Dozier : 66.7% (3 tirs tentés)
+4. Patrick Baldwin Jr, : 56.5% (24 tirs tentés)
+5. Dru Smith : 53.3% (29 tirs tentés)
+6. Daeqwon Plowden : 52.9% (17 tirs tentés)
+7. P.J. Tucker : 50.0% (6 tirs tentés)
+8. Jahmir Young : 50.0% (2 tirs tentés)
+9. David Duke Jr, : 50.0% (6 tirs tentés)
+10. Jacob Toppin : 50.0% (10 tirs tentés)","Skal Labissiere 100% (3PA=1), Alondes Williams 100% (1), PJ Dozier 66.7% (3), Patrick Baldwin Jr 56.5% (24), Dru Smith 53.3% (29), Daeqwon Plowden 52.9% (17), Markelle Fultz 50.0% (8), Jahmir Young 50.0% (2), Drew Eubanks 50.0% (6), Jacob Toppin 50.0% (10).","SELECT player, three_p_pct, three_pa
+FROM players_stats
+ORDER BY three_p_pct DESC
+LIMIT 10",1.0,0.9972725455643876,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,10.0,sql,"Voici les 10 meilleurs pourcentages à 3 points (3P%) sans contrainte de volume, avec le nombre de tirs tentés (3PA) :
+
+1. Skal Labissiere : 100.0% (1 tir tenté)
+2. Alondes Williams : 100.0% (1 tir tenté)
+3. PJ Dozier : 66.7% (3 tirs tentés)
+4. Patrick Baldwin Jr : 56.5% (24 tirs tentés)
+5. Dru Smith : 53.3% (29 tirs tentés)
+6. Daeqwon Plowden : 52.9% (17 tirs tentés)
+7. P.J. Tucker : 50.0% (6 tirs tentés)
+8. Jahmir Young : 50.0% (2 tirs tentés)
+9. David Duke Jr : 50.0% (6 tirs tentés)
+10. Jacob Toppin : 50.0% (10 tirs tentés)","Skal Labissiere 100% (3PA=1), Alondes Williams 100% (1), PJ Dozier 66.7% (3), Patrick Baldwin Jr 56.5% (24), Dru Smith 53.3% (29), Daeqwon Plowden 52.9% (17), Markelle Fultz 50.0% (8), Jahmir Young 50.0% (2), Drew Eubanks 50.0% (6), Jacob Toppin 50.0% (10).","SELECT p.player, p.three_p_pct, p.three_pa
+FROM players_stats p
+ORDER BY p.three_p_pct DESC
+LIMIT 10",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Quels sont les 5 meilleurs Net Rating (NETRTG) parmi les joueurs ayant au moins 1000 minutes totales (GP × Min ≥ 1000) ?,1.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,0.0,sql,Aucun résultat trouvé pour les 5 meilleurs Net Rating (NETRTG) parmi les joueurs ayant au moins 1000 minutes totales (GP × Min ≥ 1000).,Shai Gilgeous-Alexander 16.7; Isaiah Joe 15.8; Alex Caruso 15.0; Luke Kornet 14.9; Kenrich Williams 14.5.,"SELECT player, team_code, netrtg
+FROM players_stats
+JOIN teams ON players_stats.team_code = teams.team_code
+WHERE (gp * minutes) >= 1000
+ORDER BY netrtg DESC
+LIMIT 5",1.0,0.9853826509917104,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,5.0,sql,"Les 5 meilleurs Net Rating (NETRTG) parmi les joueurs ayant au moins 1000 minutes totales sont :
+1. Shai Gilgeous-Alexander avec un NETRTG de 16.7
+2. Isaiah Joe avec un NETRTG de 15.8
+3. Alex Caruso avec un NETRTG de 15.0
+4. Luke Kornet avec un NETRTG de 14.9
+5. Kenrich Williams avec un NETRTG de 14.5",Shai Gilgeous-Alexander 16.7; Isaiah Joe 15.8; Alex Caruso 15.0; Luke Kornet 14.9; Kenrich Williams 14.5.,"SELECT p.player, p.netrtg
+FROM players_stats p
+WHERE p.gp * p.minutes >= 1000
+ORDER BY p.netrtg DESC
+LIMIT 5",both,0.0,0.9853826509917104,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,-0.9853826509917104
+Quels sont les 5 meilleurs True Shooting % (TS%) parmi les joueurs ayant au moins 1000 minutes totales (GP × Min ≥ 1000) ?,1.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,0.0,sql,Aucun résultat trouvé pour les 5 meilleurs True Shooting % (TS%) parmi les joueurs ayant au moins 1000 minutes totales (GP × Min ≥ 1000).,Jarrett Allen 72.4; Jaxson Hayes 72.0; Daniel Gafford 71.6; Jalen Duren 70.3; Rudy Gobert 68.7.,"SELECT player, team_code, ts_pct
+FROM players_stats
+JOIN teams ON players_stats.team_code = teams.team_code
+WHERE (gp * minutes) >= 1000
+ORDER BY ts_pct DESC
+LIMIT 5",1.0,0.9886992073283708,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,5.0,sql,"Les 5 meilleurs True Shooting % (TS%) parmi les joueurs ayant au moins 1000 minutes totales sont :
+1. Jarrett Allen avec 72.4%
+2. Jaxson Hayes avec 72.0%
+3. Daniel Gafford avec 71.6%
+4. Jalen Duren avec 70.3%
+5. Rudy Gobert avec 68.7%",Jarrett Allen 72.4; Jaxson Hayes 72.0; Daniel Gafford 71.6; Jalen Duren 70.3; Rudy Gobert 68.7.,"SELECT player, ts_pct
+FROM players_stats
+WHERE gp * minutes >= 1000
+ORDER BY ts_pct DESC
+LIMIT 5",both,0.0,0.9886992073283708,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,-0.9886992073283708
+Quels sont les 5 meilleurs marqueurs par minute (PTS / (GP×Min)) parmi les joueurs ayant au moins 1000 minutes totales ?,1.0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,0.0,sql,Aucun joueur ne satisfait les critères de la requête. Il est possible que la table ne contienne pas assez de données.,Shai Gilgeous-Alexander 0.956; Giannis Antetokounmpo 0.889; Nikola Jokić 0.807; Luka Dončić 0.797; LaMelo Ball 0.787.,"SELECT player, team_code, (pts / (gp * minutes)) AS pts_per_minute
+FROM players_stats
+WHERE minutes >= 1000
+ORDER BY pts_per_minute DESC
+LIMIT 5",1.0,0.9523005663655094,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,5.0,sql,"Les 5 meilleurs marqueurs par minute (PTS / (GP×Min)) parmi les joueurs ayant au moins 1000 minutes totales sont :
+1. Shai Gilgeous-Alexander (OKC) : 0.956 points par minute
+2. Giannis Antetokounmpo (MIL) : 0.889 points par minute
+3. Nikola Jokić (DEN) : 0.807 points par minute
+4. Luka Dončić (LAL) : 0.797 points par minute
+5. LaMelo Ball (CHA) : 0.787 points par minute",Shai Gilgeous-Alexander 0.956; Giannis Antetokounmpo 0.889; Nikola Jokić 0.807; Luka Dončić 0.797; LaMelo Ball 0.787.,"SELECT p.player, p.team_code, p.age, p.gp, p.minutes, p.pts, (p.pts / (p.gp * p.minutes)) AS pts_per_minute
+FROM players_stats p
+WHERE p.gp * p.minutes >= 1000
+ORDER BY pts_per_minute DESC
+LIMIT 5",both,0.0,0.9523005663655094,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,-0.9523005663655094
+Quels sont les avis exprimés sur l'équipe d'Orlando Magic dans le document Reddit 1 ?,0.9090909090909092,0.9936204207460898,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis exprimés sur l'équipe d'Orlando Magic dans le document Reddit 1 sont mitigés. Certains utilisateurs critiquent leur manque de tireurs à trois points, les comparant à des équipes des années 2000, et soulignent leur difficulté à gagner sans cette compétence. D'autres remarquent que l'équipe manque de talent et de capacité de tir, se concentrant sur des tactiques physiques plutôt que sur des compétences offensives. Un utilisateur mentionne spécifiquement que les Magic n'ont pas de tireurs et que leur style de jeu rappelle les années 2000, ce qui peut être divertissant mais pas suffisant pour gagner.",Le fil décrit le Magic comme très faible au tir (« awful shooting ») et mentionne deux jeunes joueurs (Paolo et Franz).,,1.0,0.9936204207460898,1.0,1.0,1.0,0.2,1.0,1.0,1.0,1.0,1.0,,rag,"Les avis exprimés sur l'équipe d'Orlando Magic dans le document Reddit 1 sont mitigés. Certains utilisateurs critiquent leur manque de tireurs à trois points, les comparant à des équipes des années 2000, et soulignent qu'ils ne pourront pas gagner sans améliorer leur jeu à trois points. D'autres utilisateurs expriment leur dégoût en regardant l'équipe jouer, estimant qu'ils manquent de talent et de capacité de tir, et qu'ils se concentrent trop sur les fautes et les tirs contestés plutôt que sur un jeu propre. Un utilisateur mentionne spécifiquement que les Magic n'ont pas de créateur de jeux secondaire, ce qui les handicape dans les séries éliminatoires.",Le fil décrit le Magic comme très faible au tir (« awful shooting ») et mentionne deux jeunes joueurs (Paolo et Franz).,,both,0.09090909090909083,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.09090909090909083
+Qui a commis le plus de pertes de balle (TOV) et combien ?,1.0,0.9507771759984868,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Trae Young a commis le plus de pertes de balle (TOV) avec un total de 357.,Trae Young — 357 pertes de balle.,"SELECT player, tov
+FROM players_stats
+ORDER BY tov DESC
+LIMIT 1",1.0,0.9513654626856602,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Trae Young a commis le plus de pertes de balle (TOV) avec un total de 357.,Trae Young — 357 pertes de balle.,"SELECT player, tov
+FROM players_stats
+ORDER BY tov DESC
+LIMIT 1",both,0.0,0.0005882866871734782,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.0005882866871734782
+Qui a le meilleur +/- ?,1.0,0.760616271861735,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander (OKC) a le meilleur +/- avec +12.1.,"Shai Gilgeous-Alexander (+12.1), en précisant que c'est d'après ce fichier Excel uniquement.","SELECT player, team_code, plus_minus
+FROM players_stats
+ORDER BY plus_minus DESC
+LIMIT 1",1.0,0.7774808892630093,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander a le meilleur +/- avec une valeur de 12.1.,"Shai Gilgeous-Alexander (+12.1), en précisant que c'est d'après ce fichier Excel uniquement.","SELECT player, plus_minus
+FROM players_stats
+ORDER BY plus_minus DESC
+LIMIT 1",both,0.0,0.016864617401274318,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.016864617401274318
+Qui a le meilleur True Shooting ?,1.0,0.874337627905563,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.5,0.6666666666666666,1.0,hybrid,Alondes Williams a le meilleur True Shooting avec 125.0.,"Clarifier le critère (volume). Sans filtre, des joueurs à faible volume dominent. Avec GP×Min ≥ 1000, Jarrett Allen a le meilleur TS% (72.4).","SELECT player, ts_pct
+FROM players_stats
+ORDER BY ts_pct DESC
+LIMIT 1",1.0,0.9035057846484774,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.5,0.6666666666666666,1.0,hybrid,Alondes Williams a le meilleur True Shooting avec un taux de 125.0.,"Clarifier le critère (volume). Sans filtre, des joueurs à faible volume dominent. Avec GP×Min ≥ 1000, Jarrett Allen a le meilleur TS% (72.4).","SELECT player, ts_pct
+FROM players_stats
+ORDER BY ts_pct DESC
+LIMIT 1",both,0.0,0.029168156742914397,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.029168156742914397
+Qui a le meilleur plus/minus (+/-) et quelle est sa valeur ?,1.0,0.9953144701920656,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander a le meilleur plus/minus (+/-) avec une valeur de 12.1.,Shai Gilgeous-Alexander — +12.1.,"SELECT player, plus_minus
+FROM players_stats
+ORDER BY plus_minus DESC
+LIMIT 1",1.0,0.8505001184577524,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Shai Gilgeous-Alexander a le meilleur plus/minus (+/-) avec une valeur de 12.1.,Shai Gilgeous-Alexander — +12.1.,"SELECT player, plus_minus
+FROM players_stats
+ORDER BY plus_minus DESC
+LIMIT 1",both,0.0,-0.14481435173431323,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.14481435173431323
+Qui a le meilleur ratio AST/TO et quelle est sa valeur ?,1.0,0.8137330269609427,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Mason Jones a le meilleur ratio AST/TO avec une valeur de 11.0.,Mason Jones — 11.0.,"SELECT player, ast_to_ratio
+FROM players_stats
+ORDER BY ast_to_ratio DESC
+LIMIT 1",1.0,0.8137330269609427,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Mason Jones a le meilleur ratio AST/TO avec une valeur de 11.0.,Mason Jones — 11.0.,"SELECT player, ast / tov AS ast_to_ratio
+FROM players_stats
+ORDER BY ast_to_ratio DESC
+LIMIT 1",both,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Qui a le plus de passes décisives (AST) et combien ?,1.0,0.9068057410172738,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Trae Young a le plus de passes décisives avec 882.,Trae Young — 882 passes décisives.,"SELECT player, team_code, ast
+FROM players_stats
+ORDER BY ast DESC
+LIMIT 1",1.0,0.906873081261874,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Trae Young a le plus de passes décisives avec 882.,Trae Young — 882 passes décisives.,"SELECT player, ast FROM players_stats ORDER BY ast DESC LIMIT 1",both,0.0,6.734024460020027e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-6.734024460020027e-05
+Qui a le plus de rebonds (REB) et combien ?,1.0,0.8546010022538446,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Ivica Zubac a le plus de rebonds avec 1008 rebonds.,Ivica Zubac — 1008 rebonds.,"SELECT player, team_code, reb
+FROM players_stats
+ORDER BY reb DESC
+LIMIT 1",1.0,0.8510945651435915,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Ivica Zubac a le plus de rebonds avec un total de 1008.,Ivica Zubac — 1008 rebonds.,"SELECT player, reb FROM players_stats ORDER BY reb DESC LIMIT 1",both,0.0,-0.0035064371102531133,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0035064371102531133
+Qui a réalisé le plus d'interceptions (STL) et combien ?,1.0,0.9671993199374056,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Dyson Daniels a réalisé le plus d'interceptions (STL) avec un total de 228.,Dyson Daniels — 228 interceptions.,"SELECT player, stl FROM players_stats ORDER BY stl DESC LIMIT 1",1.0,0.9822599911084996,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Dyson Daniels a réalisé le plus d'interceptions (STL) avec un total de 228.,Dyson Daniels — 228 interceptions.,"SELECT p.player, p.stl
+FROM players_stats p
+ORDER BY p.stl DESC
+LIMIT 1",both,0.0,0.015060671171093998,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.015060671171093998
+Qui a réalisé le plus de contres (BLK) et combien ?,1.0,0.9398444115497652,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Victor Wembanyama (SAS) a réalisé le plus de contres (BLK) avec 175 contres.,Victor Wembanyama — 175 contres.,"SELECT player, team_code, blk
+FROM players_stats
+ORDER BY blk DESC
+LIMIT 1",1.0,0.9611786451334088,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,sql,Victor Wembanyama a réalisé le plus de contres (BLK) avec un total de 175.,Victor Wembanyama — 175 contres.,"SELECT player, blk FROM players_stats ORDER BY blk DESC LIMIT 1",both,0.0,0.021334233583643614,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.021334233583643614
+Résume en 3 points le sujet général de Reddit 1 (de quoi parlent les utilisateurs ?).,1.0,0.7047664592892398,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,,rag,"1. Les utilisateurs discutent de la toxicité potentielle et de l'excitation autour des séries de playoffs, en particulier entre les Pacers et le Thunder, et mentionnent des joueurs comme Tyrese Haliburton, connu pour son comportement vocal et provocateur.
+2. Il y a des discussions sur les frustrations des fans concernant les arbitres et les performances de leurs équipes, ainsi que des commentaires sur la manière dont les médias et les fans peuvent être obsédés par les mêmes sujets.
+3. Les utilisateurs débattent également de la manière dont les équipes et les joueurs sont perçus, avec des discussions sur les équipes favorites et les dynamiques de jeu, ainsi que des réflexions sur l'impact des blessures et des performances des joueurs sur les résultats des matchs.",,,1.0,0.8216467781550172,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,,rag,"1. Les utilisateurs discutent de la toxicité et de l'engagement des fans pendant les séries de playoffs, notamment entre les équipes comme les Pacers et les Thunder. 2. Ils expriment des opinions sur les médias et l'obsession des fans, ainsi que sur la manière dont les supporters réagissent aux performances de leur équipe. 3. Les discussions portent également sur des sujets comme les statistiques des équipes, les performances des joueurs, et les dynamiques de compétition dans la NBA.",,,both,0.0,0.11688031886577743,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,-0.11688031886577743

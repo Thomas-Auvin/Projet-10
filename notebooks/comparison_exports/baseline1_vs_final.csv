@@ -1,0 +1,13 @@
+metric,Baseline historique,Dernier run,delta_absolu,delta_%
+faithfulness,0.530251,0.954032,0.423781,79.920766
+answer_relevancy,0.518936,0.817038,0.298102,57.444796
+hit_at_k,0.444444,0.422222,-0.022222,-5.0
+mrr,0.444444,0.422222,-0.022222,-5.0
+recall_at_k,0.344444,0.344444,0.0,0.0
+precision_at_k,0.088889,0.084444,-0.004444,-5.0
+tool_routing_ok,,0.955556,,
+tool_call_accuracy_ragas,,0.955556,,
+tool_call_precision_ragas,,1.0,,
+tool_call_recall_ragas,,0.977778,,
+tool_call_f1_ragas,,0.985185,,
+sql_row_count,,1.945946,,
