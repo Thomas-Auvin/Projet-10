@@ -188,6 +188,11 @@ L’application est instrumentée avec **Logfire** pour suivre :
 ```
 
 ---
+## Schéma d’architecture
+
+![Schéma d’architecture du projet](out/architecture/Projet%2010%20—%20Architecture%20fonctionnelle.png)
+
+Source du diagramme : [architecture.puml](architecture.puml)
 
 ## Installation locale
 
