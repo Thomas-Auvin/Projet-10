@@ -25,6 +25,7 @@ logging.basicConfig(
 
 setup_logfire()
 
+
 @st.cache_resource
 def get_vector_store_manager() -> VectorStoreManager | None:
     logging.info("Tentative de chargement du VectorStoreManager...")
@@ -35,13 +36,19 @@ def get_vector_store_manager() -> VectorStoreManager | None:
             st.warning(
                 "Assurez-vous d'avoir exécuté 'python indexer.py' après avoir placé vos fichiers dans le dossier 'inputs'."
             )
-            logging.error("Index Faiss ou chunks non trouvés/chargés par VectorStoreManager.")
+            logging.error(
+                "Index Faiss ou chunks non trouvés/chargés par VectorStoreManager."
+            )
             return None
-        logging.info("VectorStoreManager chargé avec succès (%s vecteurs).", manager.index.ntotal)
+        logging.info(
+            "VectorStoreManager chargé avec succès (%s vecteurs).", manager.index.ntotal
+        )
         return manager
     except FileNotFoundError:
         st.error("Fichiers d'index ou de chunks non trouvés.")
-        st.warning("Veuillez exécuter 'python indexer.py' pour créer la base de connaissances.")
+        st.warning(
+            "Veuillez exécuter 'python indexer.py' pour créer la base de connaissances."
+        )
         logging.error("FileNotFoundError lors de l'init de VectorStoreManager.")
         return None
     except Exception as e:

@@ -124,7 +124,9 @@ def extract_sql_from_text(text: str) -> str:
     if not text:
         return ""
 
-    code_block_match = re.search(r"```sql\s*(.*?)```", text, flags=re.IGNORECASE | re.DOTALL)
+    code_block_match = re.search(
+        r"```sql\s*(.*?)```", text, flags=re.IGNORECASE | re.DOTALL
+    )
     if code_block_match:
         text = code_block_match.group(1).strip()
     else:
@@ -142,7 +144,7 @@ def extract_sql_from_text(text: str) -> str:
     # garde uniquement à partir du premier mot utile
     anchor = re.search(r"\b(OUT_OF_SCOPE|SELECT|WITH)\b", text, flags=re.IGNORECASE)
     if anchor:
-        text = text[anchor.start():].strip()
+        text = text[anchor.start() :].strip()
 
     # supprime un éventuel préfixe "sql"
     text = re.sub(r"^\s*sql\s*", "", text, flags=re.IGNORECASE).strip()
@@ -198,9 +200,7 @@ def _normalize_dangling_table_aliases(sql_query: str) -> str:
 
     has_teams_alias = bool(
         re.search(r"\bFROM\s+teams\s+(?:AS\s+)?t\b", sql, flags=re.IGNORECASE)
-    ) or bool(
-        re.search(r"\bJOIN\s+teams\s+(?:AS\s+)?t\b", sql, flags=re.IGNORECASE)
-    )
+    ) or bool(re.search(r"\bJOIN\s+teams\s+(?:AS\s+)?t\b", sql, flags=re.IGNORECASE))
 
     if not has_players_alias:
         sql = re.sub(r"\bp\.", "", sql)
@@ -278,7 +278,9 @@ def _is_single_row_aggregate(sql_query: str) -> bool:
     """
     sql = sql_query.upper()
 
-    has_aggregate = any(func in sql for func in ["MAX(", "MIN(", "AVG(", "SUM(", "COUNT("])
+    has_aggregate = any(
+        func in sql for func in ["MAX(", "MIN(", "AVG(", "SUM(", "COUNT("]
+    )
     has_group_by = "GROUP BY" in sql
 
     return has_aggregate and not has_group_by
@@ -334,7 +336,9 @@ def get_team_catalog(db_path_str: str) -> list[tuple[str, str]]:
         conn.close()
 
 
-def find_team_reference(question: str, db_path: Path = DB_PATH) -> tuple[str, str] | None:
+def find_team_reference(
+    question: str, db_path: Path = DB_PATH
+) -> tuple[str, str] | None:
     q = normalize_question(question)
     catalog = get_team_catalog(str(db_path))
 
@@ -382,7 +386,12 @@ def is_top1_vs_top10_gap_question(question: str) -> bool:
     return (
         ("écart" in q or "ecart" in q or "difference" in q)
         and ("10e" in q or "10ème" in q or "10eme" in q or "#10" in q)
-        and ("meilleur marqueur" in q or "meilleur scoreur" in q or "pts" in q or "points" in q)
+        and (
+            "meilleur marqueur" in q
+            or "meilleur scoreur" in q
+            or "pts" in q
+            or "points" in q
+        )
     )
 
 
@@ -455,7 +464,15 @@ def validate_sql_semantics(question: str, sql_query: str) -> str | None:
 
     # Sur jointure teams, les colonnes communes doivent être qualifiées
     if "join teams" in sql_low:
-        for col in ["team_code", "player", "pts", "ts_pct", "netrtg", "offrtg", "defrtg"]:
+        for col in [
+            "team_code",
+            "player",
+            "pts",
+            "ts_pct",
+            "netrtg",
+            "offrtg",
+            "defrtg",
+        ]:
             if re.search(rf"(?<!\.)\b{col}\b", sql_low):
                 return (
                     f"Requête potentiellement ambiguë après JOIN teams : colonne '{col}' non qualifiée. "
@@ -469,21 +486,23 @@ def validate_sql_semantics(question: str, sql_query: str) -> str | None:
                 "La question demande un meilleur marqueur / scoreur, donc il faut classer sur pts "
                 "et non sur des points par minute."
             )
-        if " order by " in sql_low and "pts desc" not in sql_low and "p.pts desc" not in sql_low:
-            return (
-                "La question demande un meilleur marqueur / scoreur, il faut donc ordonner par pts DESC."
-            )
+        if (
+            " order by " in sql_low
+            and "pts desc" not in sql_low
+            and "p.pts desc" not in sql_low
+        ):
+            return "La question demande un meilleur marqueur / scoreur, il faut donc ordonner par pts DESC."
 
     # Règle métier : moyenne top 10 points
     if is_top10_points_average_question(question):
         if "avg(" not in sql_low:
-            return "La question demande une moyenne ; la requête doit utiliser AVG(...)."
+            return (
+                "La question demande une moyenne ; la requête doit utiliser AVG(...)."
+            )
         if "limit 10" not in sql_low:
             return "La question porte sur le top 10 ; la requête doit limiter explicitement à 10 lignes."
         if "from (" not in sql_low and "with " not in sql_low:
-            return (
-                "La moyenne doit porter sur le top 10, donc il faut une sous-requête ou un CTE."
-            )
+            return "La moyenne doit porter sur le top 10, donc il faut une sous-requête ou un CTE."
 
     return None
 
@@ -632,7 +651,9 @@ def is_safe_read_only_query(sql_query: str) -> bool:
 def run_sql_query(sql_query: str, db_path: Path = DB_PATH) -> list[dict[str, Any]]:
     """Exécute une requête SQL en lecture seule et retourne les lignes."""
     if not is_safe_read_only_query(sql_query):
-        raise ValueError("Requête SQL refusée : seules les requêtes SELECT / WITH sont autorisées.")
+        raise ValueError(
+            "Requête SQL refusée : seules les requêtes SELECT / WITH sont autorisées."
+        )
 
     conn = get_sqlite_connection(db_path)
     try:
@@ -668,7 +689,9 @@ def generate_sql_query(question: str, db_path: Path = DB_PATH) -> str:
     """Génère une requête SQL à partir d'une question en langage naturel."""
     rule_based = build_rule_based_sql(question, db_path=db_path)
     if rule_based is not None:
-        logger.info("SQL déterministe utilisé pour la question '%s': %s", question, rule_based)
+        logger.info(
+            "SQL déterministe utilisé pour la question '%s': %s", question, rule_based
+        )
         return rule_based
 
     sql_query = _call_mistral_for_sql(f"Question utilisateur : {question}")
@@ -690,7 +713,9 @@ def repair_sql_query(
     """
     rule_based = build_rule_based_sql(question, db_path=db_path)
     if rule_based is not None:
-        logger.info("SQL réparé localement pour la question '%s': %s", question, rule_based)
+        logger.info(
+            "SQL réparé localement pour la question '%s': %s", question, rule_based
+        )
         return rule_based
 
     cleaned_previous = normalize_generated_sql(previous_sql)
@@ -741,7 +766,11 @@ def _make_result(
     rows: list[dict[str, Any]],
     notes: str | None,
 ) -> SQLToolResult:
-    safe_sql_query = sql_query if isinstance(sql_query, str) and sql_query.strip() else "OUT_OF_SCOPE"
+    safe_sql_query = (
+        sql_query
+        if isinstance(sql_query, str) and sql_query.strip()
+        else "OUT_OF_SCOPE"
+    )
 
     return SQLToolResult(
         question=question,
@@ -770,7 +799,9 @@ def ask_sql(question: str, db_path: Path = DB_PATH) -> SQLToolResult:
     try:
         sql_query = generate_sql_query(question, db_path=db_path)
     except Exception as e:
-        logger.exception("Erreur pendant la génération SQL pour la question '%s'", question)
+        logger.exception(
+            "Erreur pendant la génération SQL pour la question '%s'", question
+        )
         return _make_result(
             question=question,
             sql_query="OUT_OF_SCOPE",
@@ -801,9 +832,13 @@ def ask_sql(question: str, db_path: Path = DB_PATH) -> SQLToolResult:
 
     semantic_error = validate_sql_semantics(question, sql_query)
     if semantic_error is not None:
-        logger.warning("SQL rejeté avant exécution pour '%s' : %s", question, semantic_error)
+        logger.warning(
+            "SQL rejeté avant exécution pour '%s' : %s", question, semantic_error
+        )
         try:
-            repaired_sql = repair_sql_query(question, sql_query, semantic_error, db_path=db_path)
+            repaired_sql = repair_sql_query(
+                question, sql_query, semantic_error, db_path=db_path
+            )
         except Exception as e:
             logger.exception("Erreur pendant la réparation SQL pour '%s'", question)
             return _make_result(
@@ -848,14 +883,18 @@ def ask_sql(question: str, db_path: Path = DB_PATH) -> SQLToolResult:
             question=question,
             sql_query=sql_query,
             rows=rows,
-            notes=None if rows else "La requête est valide mais n'a retourné aucune ligne.",
+            notes=None
+            if rows
+            else "La requête est valide mais n'a retourné aucune ligne.",
         )
 
     except sqlite3.OperationalError as e:
         logger.exception("Erreur SQL opérationnelle pour la question '%s'", question)
 
         try:
-            repaired_sql = repair_sql_query(question, sql_query, str(e), db_path=db_path)
+            repaired_sql = repair_sql_query(
+                question, sql_query, str(e), db_path=db_path
+            )
         except Exception as repair_exc:
             logger.exception("Erreur pendant la réparation SQL pour '%s'", question)
             return _make_result(
@@ -900,7 +939,9 @@ def ask_sql(question: str, db_path: Path = DB_PATH) -> SQLToolResult:
                 question=question,
                 sql_query=repaired_sql,
                 rows=rows,
-                notes=None if rows else "La requête SQL réparée est valide mais n'a retourné aucune ligne.",
+                notes=None
+                if rows
+                else "La requête SQL réparée est valide mais n'a retourné aucune ligne.",
             )
         except Exception as e2:
             logger.exception("Échec final SQL pour la question '%s'", question)
@@ -912,7 +953,9 @@ def ask_sql(question: str, db_path: Path = DB_PATH) -> SQLToolResult:
             )
 
     except Exception as e:
-        logger.exception("Erreur pendant l'exécution SQL pour la question '%s'", question)
+        logger.exception(
+            "Erreur pendant l'exécution SQL pour la question '%s'", question
+        )
         return _make_result(
             question=question,
             sql_query=sql_query,

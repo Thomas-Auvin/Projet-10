@@ -1,4 +1,3 @@
-# evals/evaluate_ragas.py
 from __future__ import annotations
 
 import argparse
@@ -12,14 +11,10 @@ from typing import Any, Dict, List, Set, Tuple
 from dotenv import load_dotenv
 from pydantic_ai.exceptions import ModelHTTPError
 
-# --- Ensure project root is on sys.path (so imports work everywhere) ---
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from utils.config import MISTRAL_API_KEY, MODEL_NAME, SEARCH_K
 from utils.vector_store import VectorStoreManager
-
 from rag.agent import run_agent_with_trace
 from rag.schemas import UserQuestion
 
@@ -728,9 +723,11 @@ def main() -> int:
     with (out_dir / "summary.json").open("w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
 
-    print(f"OK - saved:\n- {traces_path}\n- {out_csv}\n- {out_dir/'summary.json'}")
+    print(f"OK - saved:\n- {traces_path}\n- {out_csv}\n- {out_dir / 'summary.json'}")
     if metrics_skipped:
-        print("WARNING - some metrics were skipped. See summary.json -> metrics_skipped")
+        print(
+            "WARNING - some metrics were skipped. See summary.json -> metrics_skipped"
+        )
 
     try:
         num_means = (

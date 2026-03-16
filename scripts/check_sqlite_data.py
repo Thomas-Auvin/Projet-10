@@ -1,12 +1,9 @@
-# scripts/check_sqlite_data.py
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from rag.sql_db import DB_PATH, get_connection, quick_summary
 

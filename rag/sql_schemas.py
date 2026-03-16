@@ -89,7 +89,9 @@ class PlayerStatRow(BaseModel):
     pie: Optional[float] = None
     poss: Optional[float] = None
 
-    @field_validator("source_file", "source_sheet", "player", "team_code", mode="before")
+    @field_validator(
+        "source_file", "source_sheet", "player", "team_code", mode="before"
+    )
     @classmethod
     def clean_required_str(cls, value):
         value = _empty_to_none(value)
@@ -171,7 +173,9 @@ class TeamRow(BaseModel):
     team_code: str = Field(..., min_length=1)
     team_name: str = Field(..., min_length=1)
 
-    @field_validator("source_file", "source_sheet", "team_code", "team_name", mode="before")
+    @field_validator(
+        "source_file", "source_sheet", "team_code", "team_name", mode="before"
+    )
     @classmethod
     def clean_required_str(cls, value):
         value = _empty_to_none(value)
@@ -190,7 +194,13 @@ class MetricDictionaryRow(BaseModel):
     metric_code: str = Field(..., min_length=1)
     metric_description: str = Field(..., min_length=1)
 
-    @field_validator("source_file", "source_sheet", "metric_code", "metric_description", mode="before")
+    @field_validator(
+        "source_file",
+        "source_sheet",
+        "metric_code",
+        "metric_description",
+        mode="before",
+    )
     @classmethod
     def clean_required_str(cls, value):
         value = _empty_to_none(value)

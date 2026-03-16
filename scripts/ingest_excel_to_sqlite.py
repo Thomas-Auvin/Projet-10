@@ -1,19 +1,16 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
 import argparse
 import logging
 import re
+import sys
 import unicodedata
 from datetime import time
+from pathlib import Path
 
 import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from rag.sql_db import (
     DB_PATH,
@@ -26,7 +23,9 @@ from rag.sql_db import (
 )
 from rag.sql_schemas import MetricDictionaryRow, PlayerStatRow, TeamRow
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -189,9 +188,13 @@ def load_players_stats_rows(excel_path: Path) -> list[PlayerStatRow]:
 
     # On garde surtout les lignes avec un joueur
     if "player" not in df.columns:
-        raise ValueError("La colonne 'player' n'a pas pu être détectée dans 'Données NBA'.")
+        raise ValueError(
+            "La colonne 'player' n'a pas pu être détectée dans 'Données NBA'."
+        )
     if "team_code" not in df.columns:
-        raise ValueError("La colonne 'team_code' n'a pas pu être détectée dans 'Données NBA'.")
+        raise ValueError(
+            "La colonne 'team_code' n'a pas pu être détectée dans 'Données NBA'."
+        )
 
     df = df[df["player"].notna()].copy()
     df = df.reset_index(drop=True)
@@ -332,7 +335,9 @@ def load_metric_dictionary_rows(excel_path: Path) -> list[MetricDictionaryRow]:
     df = drop_empty_rows_and_cols(df)
     df = rename_columns(df)
 
-    logger.info("Colonnes détectées pour 'Dictionnaire des données': %s", list(df.columns))
+    logger.info(
+        "Colonnes détectées pour 'Dictionnaire des données': %s", list(df.columns)
+    )
 
     code_col = "metric_code" if "metric_code" in df.columns else None
     desc_col = "metric_description" if "metric_description" in df.columns else None
@@ -348,7 +353,9 @@ def load_metric_dictionary_rows(excel_path: Path) -> list[MetricDictionaryRow]:
                 desc_col,
             )
         else:
-            logger.warning("Feuille 'Dictionnaire des données' ignorée: colonnes insuffisantes.")
+            logger.warning(
+                "Feuille 'Dictionnaire des données' ignorée: colonnes insuffisantes."
+            )
             return []
 
     df = df[[code_col, desc_col]].copy()

@@ -42,20 +42,26 @@ except Exception as e:
     reader = None
 
 # Configuration du logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 # --- Fonctions d'extraction de texte ---
 def extract_text_from_pdf_with_ocr(file_path: str) -> Optional[str]:
     """Extrait le texte d'un fichier PDF en utilisant l'OCR (EasyOCR)."""
     if not fitz or not reader:
-        logging.warning("Modules/Modèle OCR non disponibles. Impossible d'effectuer l'OCR.")
+        logging.warning(
+            "Modules/Modèle OCR non disponibles. Impossible d'effectuer l'OCR."
+        )
         return None
 
     text_content: List[str] = []
     try:
         doc = fitz.open(file_path)
-        for page_num in tqdm(range(len(doc)), desc=f"OCR de {os.path.basename(file_path)}"):
+        for page_num in tqdm(
+            range(len(doc)), desc=f"OCR de {os.path.basename(file_path)}"
+        ):
             page = doc.load_page(page_num)
             pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
@@ -77,13 +83,21 @@ def extract_text_from_pdf_with_ocr(file_path: str) -> Optional[str]:
         doc.close()
         full_text = "\n".join(text_content).strip()
         if full_text:
-            logging.info("Texte extrait via OCR de PDF: %s (%s caractères)", file_path, len(full_text))
+            logging.info(
+                "Texte extrait via OCR de PDF: %s (%s caractères)",
+                file_path,
+                len(full_text),
+            )
             return full_text
 
         logging.warning("Aucun texte significatif extrait via OCR de %s.", file_path)
         return None
     except Exception as e:
-        logging.error("Erreur lors de l'ouverture ou du traitement OCR du PDF %s: %s", file_path, e)
+        logging.error(
+            "Erreur lors de l'ouverture ou du traitement OCR du PDF %s: %s",
+            file_path,
+            e,
+        )
         return None
 
 
@@ -110,13 +124,20 @@ def extract_text_from_pdf(file_path: str) -> Optional[str]:
             if ocr_text:
                 return ocr_text
 
-            logging.warning("L'OCR n'a pas non plus produit de texte significatif pour %s.", file_path)
+            logging.warning(
+                "L'OCR n'a pas non plus produit de texte significatif pour %s.",
+                file_path,
+            )
             return text
 
         logging.info("Texte extrait de PDF: %s (%s caractères)", file_path, len(text))
         return text
     except Exception as e:
-        logging.error("Erreur extraction PDF %s: %s. Tentative d'OCR en dernier recours...", file_path, e)
+        logging.error(
+            "Erreur extraction PDF %s: %s. Tentative d'OCR en dernier recours...",
+            file_path,
+            e,
+        )
         ocr_text = extract_text_from_pdf_with_ocr(file_path)
         if ocr_text:
             return ocr_text
@@ -200,12 +221,16 @@ def extract_text_from_excel(file_path: str) -> Optional[Union[str, Dict[str, str
             df = excel_file.parse(sheet_name)
             sheets_data[sheet_name] = df.to_string()
 
-        logging.info("Texte extrait de %s feuille(s) dans Excel: %s", len(sheets_data), file_path)
+        logging.info(
+            "Texte extrait de %s feuille(s) dans Excel: %s", len(sheets_data), file_path
+        )
         if len(sheets_data) == 1:
             return list(sheets_data.values())[0]
         return sheets_data
     except ImportError:
-        logging.warning("Pandas ou openpyxl non installé. Impossible de lire les fichiers Excel.")
+        logging.warning(
+            "Pandas ou openpyxl non installé. Impossible de lire les fichiers Excel."
+        )
         return None
     except Exception as e:
         logging.error("Erreur extraction Excel %s: %s", file_path, e)
@@ -259,7 +284,9 @@ def load_and_parse_files(input_dir: str) -> List[ParsedDocument]:
             continue
 
         relative_path = file_path.relative_to(input_path)
-        source_folder = relative_path.parts[0] if len(relative_path.parts) > 1 else "root"
+        source_folder = (
+            relative_path.parts[0] if len(relative_path.parts) > 1 else "root"
+        )
         ext = file_path.suffix.lower()
 
         logging.debug(

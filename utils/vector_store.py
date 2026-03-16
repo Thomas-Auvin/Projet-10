@@ -25,27 +25,117 @@ from .config import (
     MISTRAL_API_KEY,
 )
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 STOPWORDS_RETRIEVAL = {
-    "le", "la", "les", "de", "du", "des", "un", "une", "et", "ou", "à", "a",
-    "au", "aux", "en", "dans", "sur", "pour", "par", "avec", "sans", "ce",
-    "cet", "cette", "ces", "quel", "quelle", "quels", "quelles", "qui", "quoi",
-    "est", "sont", "été", "etre", "être", "fait", "faire", "donne", "donner",
-    "parmi", "ayant", "plus", "moins", "comme", "alors", "their", "what",
-    "which", "who", "the", "and", "for", "with", "from", "into", "among",
-    "dans", "dans", "d", "apres", "après", "puis", "donne", "donne-moi",
-    "moi", "m'", "ma", "mon", "mes", "ton", "ta", "tes",
+    "le",
+    "la",
+    "les",
+    "de",
+    "du",
+    "des",
+    "un",
+    "une",
+    "et",
+    "ou",
+    "à",
+    "a",
+    "au",
+    "aux",
+    "en",
+    "dans",
+    "sur",
+    "pour",
+    "par",
+    "avec",
+    "sans",
+    "ce",
+    "cet",
+    "cette",
+    "ces",
+    "quel",
+    "quelle",
+    "quels",
+    "quelles",
+    "qui",
+    "quoi",
+    "est",
+    "sont",
+    "été",
+    "etre",
+    "être",
+    "fait",
+    "faire",
+    "donne",
+    "donner",
+    "parmi",
+    "ayant",
+    "plus",
+    "moins",
+    "comme",
+    "alors",
+    "their",
+    "what",
+    "which",
+    "who",
+    "the",
+    "and",
+    "for",
+    "with",
+    "from",
+    "into",
+    "among",
+    "dans",
+    "dans",
+    "d",
+    "apres",
+    "après",
+    "puis",
+    "donne",
+    "donne-moi",
+    "moi",
+    "m'",
+    "ma",
+    "mon",
+    "mes",
+    "ton",
+    "ta",
+    "tes",
 }
 
 SHORT_KEEP = {
-    "ts", "usg", "pie", "pace", "ast", "to", "okc", "nba", "pts", "reb",
-    "stl", "blk", "tov", "netrtg", "offrtg", "defrtg", "3p", "3pa", "gp",
+    "ts",
+    "usg",
+    "pie",
+    "pace",
+    "ast",
+    "to",
+    "okc",
+    "nba",
+    "pts",
+    "reb",
+    "stl",
+    "blk",
+    "tov",
+    "netrtg",
+    "offrtg",
+    "defrtg",
+    "3p",
+    "3pa",
+    "gp",
 }
 
 DEFINITION_HINTS = {
-    "definis", "définis", "definition", "définition", "dictionnaire", "glossaire",
-    "explique", "expliquer",
+    "definis",
+    "définis",
+    "definition",
+    "définition",
+    "dictionnaire",
+    "glossaire",
+    "explique",
+    "expliquer",
 }
 
 
@@ -244,7 +334,9 @@ def _looks_like_definition_doc(doc: ParsedDocument) -> bool:
         full_path=doc.full_path,
         sheet=doc.sheet,
     )
-    return any(token in blob for token in ["dict", "diction", "gloss", "definition", "metric"])
+    return any(
+        token in blob for token in ["dict", "diction", "gloss", "definition", "metric"]
+    )
 
 
 def _make_splitter_for_doc(doc: ParsedDocument) -> RecursiveCharacterTextSplitter:
@@ -310,7 +402,9 @@ class VectorStoreManager:
         if MISTRAL_API_KEY:
             self.mistral_client = Mistral(api_key=MISTRAL_API_KEY)
         else:
-            logging.warning("MISTRAL_API_KEY manquante: embeddings/recherche indisponibles.")
+            logging.warning(
+                "MISTRAL_API_KEY manquante: embeddings/recherche indisponibles."
+            )
 
         self._load_index_and_chunks()
 
@@ -351,7 +445,9 @@ class VectorStoreManager:
         """Charge l'index Faiss et les chunks si les fichiers existent."""
         if os.path.exists(FAISS_INDEX_FILE) and os.path.exists(DOCUMENT_CHUNKS_FILE):
             try:
-                logging.info("Chargement de l'index Faiss depuis %s...", FAISS_INDEX_FILE)
+                logging.info(
+                    "Chargement de l'index Faiss depuis %s...", FAISS_INDEX_FILE
+                )
                 self.index = faiss.read_index(FAISS_INDEX_FILE)
 
                 logging.info("Chargement des chunks depuis %s...", DOCUMENT_CHUNKS_FILE)
@@ -370,7 +466,9 @@ class VectorStoreManager:
                 self.index = None
                 self.document_chunks = []
         else:
-            logging.warning("Fichiers d'index Faiss ou de chunks non trouvés. L'index est vide.")
+            logging.warning(
+                "Fichiers d'index Faiss ou de chunks non trouvés. L'index est vide."
+            )
 
     def _save_index_and_chunks(self) -> None:
         """Sauvegarde l'index Faiss et la liste des chunks."""
@@ -396,7 +494,9 @@ class VectorStoreManager:
     # -----------------------------
     # Chunking
     # -----------------------------
-    def _split_documents_to_chunks(self, documents: List[ParsedDocument]) -> List[Chunk]:
+    def _split_documents_to_chunks(
+        self, documents: List[ParsedDocument]
+    ) -> List[Chunk]:
         """Découpe les documents en chunks avec métadonnées explicites."""
         logging.info(
             "Découpage de %s documents en chunks (taille=%s, chevauchement=%s)...",
@@ -450,7 +550,9 @@ class VectorStoreManager:
     def _generate_embeddings(self, chunks: List[Chunk]) -> Optional[np.ndarray]:
         """Génère les embeddings pour une liste de chunks via l'API Mistral."""
         if not self.mistral_client:
-            logging.error("Impossible de générer les embeddings: client Mistral non initialisé.")
+            logging.error(
+                "Impossible de générer les embeddings: client Mistral non initialisé."
+            )
             return None
         if not chunks:
             logging.warning("Aucun chunk fourni pour générer les embeddings.")
@@ -500,13 +602,19 @@ class VectorStoreManager:
                         num_failed,
                         dim,
                     )
-                    all_embeddings.extend([np.zeros(dim, dtype="float32").tolist()] * num_failed)
+                    all_embeddings.extend(
+                        [np.zeros(dim, dtype="float32").tolist()] * num_failed
+                    )
                 else:
-                    logging.error("Échec sur le premier lot: dimension inconnue, saut du lot.")
+                    logging.error(
+                        "Échec sur le premier lot: dimension inconnue, saut du lot."
+                    )
                     continue
 
             except Exception as e:
-                logging.exception("Erreur inattendue embeddings lot %s: %s", batch_num, e)
+                logging.exception(
+                    "Erreur inattendue embeddings lot %s: %s", batch_num, e
+                )
                 num_failed = len(texts_to_embed)
                 if all_embeddings:
                     dim = len(all_embeddings[0])
@@ -515,9 +623,13 @@ class VectorStoreManager:
                         num_failed,
                         dim,
                     )
-                    all_embeddings.extend([np.zeros(dim, dtype="float32").tolist()] * num_failed)
+                    all_embeddings.extend(
+                        [np.zeros(dim, dtype="float32").tolist()] * num_failed
+                    )
                 else:
-                    logging.error("Échec sur le premier lot: dimension inconnue, saut du lot.")
+                    logging.error(
+                        "Échec sur le premier lot: dimension inconnue, saut du lot."
+                    )
                     continue
 
         if not all_embeddings:
@@ -525,7 +637,9 @@ class VectorStoreManager:
             return None
 
         embeddings_array = np.array(all_embeddings, dtype="float32")
-        logging.info("Embeddings générés avec succès. Shape: %s", embeddings_array.shape)
+        logging.info(
+            "Embeddings générés avec succès. Shape: %s", embeddings_array.shape
+        )
         return embeddings_array
 
     # -----------------------------
@@ -539,12 +653,16 @@ class VectorStoreManager:
 
         self.document_chunks = self._split_documents_to_chunks(documents)
         if not self.document_chunks:
-            logging.error("Le découpage n'a produit aucun chunk. Impossible de construire l'index.")
+            logging.error(
+                "Le découpage n'a produit aucun chunk. Impossible de construire l'index."
+            )
             return
 
         embeddings = self._generate_embeddings(self.document_chunks)
         if embeddings is None or embeddings.shape[0] != len(self.document_chunks):
-            logging.error("Embeddings invalides: mismatch embeddings/chunks. Annulation.")
+            logging.error(
+                "Embeddings invalides: mismatch embeddings/chunks. Annulation."
+            )
             self.index = None
             self.document_chunks = []
             return
@@ -565,10 +683,14 @@ class VectorStoreManager:
     # -----------------------------
     # Search
     # -----------------------------
-    def search(self, query_text: str, k: int = 5, min_score: float | None = None) -> List[RetrievedChunk]:
+    def search(
+        self, query_text: str, k: int = 5, min_score: float | None = None
+    ) -> List[RetrievedChunk]:
         """Recherche les k chunks les plus pertinents pour une requête."""
         if self.index is None or not self.document_chunks:
-            logging.warning("Recherche impossible: l'index Faiss n'est pas chargé ou est vide.")
+            logging.warning(
+                "Recherche impossible: l'index Faiss n'est pas chargé ou est vide."
+            )
             return []
         if not self.mistral_client:
             logging.error("Recherche impossible: client Mistral non initialisé.")
@@ -577,7 +699,9 @@ class VectorStoreManager:
         rewritten_query = _rewrite_retrieval_query(query_text)
         reddit_hint = _extract_reddit_hint(query_text)
 
-        logging.info("Recherche des %s chunks les plus pertinents pour: '%s'", k, query_text)
+        logging.info(
+            "Recherche des %s chunks les plus pertinents pour: '%s'", k, query_text
+        )
         logging.info("Requête retrieval réécrite: '%s'", rewritten_query)
 
         try:
@@ -585,7 +709,9 @@ class VectorStoreManager:
                 model=EMBEDDING_MODEL,
                 inputs=[rewritten_query],
             )
-            query_embedding = np.array(res.data[0].embedding, dtype="float32").reshape(1, -1)
+            query_embedding = np.array(res.data[0].embedding, dtype="float32").reshape(
+                1, -1
+            )
             faiss.normalize_L2(query_embedding)
 
             # on prend plus large puis on rerank
@@ -596,7 +722,7 @@ class VectorStoreManager:
             # si la question cible explicitement "Reddit N", on élargit encore
             # pour augmenter les chances de faire entrer ce document dans le pool candidat.
             if reddit_hint:
-                search_k = max(search_k, 60)                
+                search_k = max(search_k, 60)
 
             scores, indices = self.index.search(query_embedding, search_k)
 
@@ -607,7 +733,10 @@ class VectorStoreManager:
 
                 similarity_percent = float(raw_score) * 100.0
 
-                if min_score is not None and similarity_percent < float(min_score) * 100.0:
+                if (
+                    min_score is not None
+                    and similarity_percent < float(min_score) * 100.0
+                ):
                     continue
 
                 chunk = self.document_chunks[idx]
@@ -634,7 +763,8 @@ class VectorStoreManager:
             # On évite un "hard filter" aveugle qui viderait tout.
             if reddit_hint:
                 targeted_candidates = [
-                    chunk for chunk in candidates
+                    chunk
+                    for chunk in candidates
                     if _chunk_matches_reddit_hint(chunk, reddit_hint)
                 ]
                 if len(targeted_candidates) >= min(k, 3):
@@ -653,7 +783,9 @@ class VectorStoreManager:
 
             final_results = reranked[:k]
 
-            logging.info("%s chunks pertinents trouvés après reranking.", len(final_results))
+            logging.info(
+                "%s chunks pertinents trouvés après reranking.", len(final_results)
+            )
             return final_results
 
         except models.MistralError as e:

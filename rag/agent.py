@@ -148,10 +148,14 @@ def build_agent() -> Agent[AgentDeps, FinalAnswer]:
             ctx.deps.used_tools.append("retrieve_context")
 
         ctx.deps.retrieved_source_ids = [
-            chunk.source for chunk in retrieved_context.chunks if getattr(chunk, "source", None)
+            chunk.source
+            for chunk in retrieved_context.chunks
+            if getattr(chunk, "source", None)
         ]
         ctx.deps.retrieved_contexts = [
-            chunk.text for chunk in retrieved_context.chunks if getattr(chunk, "text", None)
+            chunk.text
+            for chunk in retrieved_context.chunks
+            if getattr(chunk, "text", None)
         ]
 
         logger.info(

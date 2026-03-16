@@ -58,7 +58,9 @@ def main() -> None:
 
     old_metrics = existing_numeric_cols(old_df, interesting_metrics)
     new_metrics = existing_numeric_cols(new_df, interesting_metrics)
-    common_metrics = [c for c in interesting_metrics if c in old_metrics and c in new_metrics]
+    common_metrics = [
+        c for c in interesting_metrics if c in old_metrics and c in new_metrics
+    ]
 
     useful_text_cols = [
         "expected_tool",
@@ -92,7 +94,8 @@ def main() -> None:
 
     # Score synthétique de dégradation
     score_cols = [
-        c for c in [
+        c
+        for c in [
             "faithfulness",
             "answer_relevancy",
             "hit_at_k",
@@ -113,7 +116,6 @@ def main() -> None:
     degraded = merged.sort_values("degradation_score", ascending=False)
 
     # Cas améliorés
-    improvement_cols = [f"delta_{c}" for c in score_cols]
     improved = merged.copy()
     improved["improvement_score"] = 0.0
     for col in score_cols:
