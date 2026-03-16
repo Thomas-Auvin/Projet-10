@@ -1,0 +1,86 @@
+@startuml Projet 10 — Architecture fonctionnelle 
+title Projet 10 — Architecture fonctionnelle (version fiche d’évaluation)
+
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Utilisateur" as User
+
+package "1. Préparation des données" {
+  component "Chargement documentaire\nutils/data_loader.py" as DataLoader
+  component "Indexation RAG\nindexer.py" as Indexer
+  component "Ingestion Excel → SQLite\nscripts/ingest_excel_to_sqlite.py" as Ingest
+
+  database "FAISS index\nvector_db/faiss_index.idx" as FaissIndex
+  database "Chunks\nvector_db/document_chunks.pkl" as Chunks
+  database "SQLite\n data/nba.sqlite" as SQLiteDB
+}
+
+package "2. Système RAG / Assistant" {
+  component "Interface Streamlit\nMistralChat.py" as Streamlit
+  component "Agent PydanticAI\nrag/agent.py" as Agent
+  component "Schémas Pydantic\nrag/schemas.py" as Schemas
+
+  component "Tool retrieve_context" as RetrieveTool
+  component "VectorStoreManager\nutils/vector_store.py" as VectorStore
+
+  component "Tool SQL\nrag/sql_tool.py" as SQLTool
+  component "Schémas SQL\nrag/sql_schemas.py" as SQLSchemas
+  component "Couche SQL\nrag/sql_db.py" as SQLDBLayer
+}
+
+package "3. Évaluation" {
+  component "Runner RAGAS\nevals/evaluate_ragas.py" as Eval
+  component "Notebook d'analyse\nanalyse_resultats_ragas.ipynb" as Notebook
+  component "Comparaison de runs\nscripts/compare_eval_runs.py" as Compare
+  component "RAGAS" as Ragas
+}
+
+package "4. Observabilité" {
+  component "Configuration Logfire\nrag/observability.py" as Observability
+  cloud "Logfire" as Logfire
+}
+
+package "Services externes" {
+  cloud "Mistral API\nchat + embeddings" as Mistral
+}
+
+' --- Préparation des données ---
+DataLoader --> Indexer : parse les documents
+Indexer --> FaissIndex : construit / sauvegarde
+Indexer --> Chunks : construit / sauvegarde
+Ingest --> SQLiteDB : alimente la base
+
+' --- Exécution applicative ---
+User --> Streamlit : pose une question
+Streamlit --> Agent : UserQuestion
+Agent --> Schemas : valide entrées / sorties
+
+Agent --> RetrieveTool : question documentaire
+RetrieveTool --> VectorStore : recherche sémantique
+VectorStore --> FaissIndex : lit index
+VectorStore --> Chunks : lit chunks
+VectorStore --> Mistral : embeddings
+
+Agent --> SQLTool : question statistique
+SQLTool --> SQLSchemas : structure résultats
+SQLTool --> SQLDBLayer : exécute requêtes
+SQLDBLayer --> SQLiteDB : lit base
+SQLTool --> Mistral : génération SQL
+
+Agent --> Mistral : génération réponse finale
+
+' --- Évaluation ---
+Eval --> Agent : exécute le système
+Eval --> Ragas : calcule métriques
+Notebook --> Eval : analyse résultats
+Compare --> Eval : compare les runs
+
+' --- Observabilité ---
+Streamlit --> Observability : initialise
+Agent --> Logfire : traces d'exécution
+Observability --> Logfire : instrumentation
+
+@enduml
